@@ -97,6 +97,7 @@ public class VentanaPrincipal extends JFrame {
        gbc1.gridx = 0;
        gbc1.gridy = 0;
        panel.add(btnSoyCliente, gbc1);
+      
        btnSoyCliente.setFont(new Font("Goudy Old Style", Font.PLAIN, 19));
       
        
@@ -141,6 +142,7 @@ public class VentanaPrincipal extends JFrame {
         panel.add(btnSoyTrabajador, gbc2);
         Font fuenteBotones = new Font("Impact", Font.PLAIN, 19);
         btnSoyCliente.setFont(fuenteBotones);
+        //aqui he cambiado la dimension del boton de tabajador para igualarlo al de cliente
         btnSoyTrabajador.setFont(new Font("Goudy Old Style", Font.PLAIN, 19));
 
         //con esto se iguala el tamaño del boton
