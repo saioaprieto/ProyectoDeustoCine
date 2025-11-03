@@ -146,7 +146,7 @@ public class VentanaPrincipal extends JFrame {
         //con esto se iguala el tamaño del boton
         btnSoyTrabajador.setPreferredSize(new Dimension(buttonWidth, buttonHeight));
         
-
+//un cambio
         btnSoyTrabajador.setFont(fuente);
         btnSoyTrabajador.setForeground(new Color(0,0,64));
  
