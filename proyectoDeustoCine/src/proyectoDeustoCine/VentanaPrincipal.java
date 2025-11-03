@@ -143,6 +143,7 @@ public class VentanaPrincipal extends JFrame {
         btnSoyCliente.setFont(fuenteBotones);
         btnSoyTrabajador.setFont(new Font("Goudy Old Style", Font.PLAIN, 19));
 
+        //con esto se iguala el tamaño del boton
         btnSoyTrabajador.setPreferredSize(new Dimension(buttonWidth, buttonHeight));
         
 
