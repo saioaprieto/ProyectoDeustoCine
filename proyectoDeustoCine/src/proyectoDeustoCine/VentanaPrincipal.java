@@ -145,7 +145,7 @@ public class VentanaPrincipal extends JFrame {
         //aqui he cambiado la dimension del boton de tabajador para igualarlo al de cliente
         btnSoyTrabajador.setFont(new Font("Goudy Old Style", Font.PLAIN, 19));
 
-        //con esto se iguala el tamaño del boton
+        //con esto se iguala el tamaño del boton de trabajador
         btnSoyTrabajador.setPreferredSize(new Dimension(buttonWidth, buttonHeight));
         
 //un cambio
