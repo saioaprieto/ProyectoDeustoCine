@@ -83,12 +83,12 @@ public class VentanaEmpleados extends JFrame {
 			                String nombre = rs.getString("NOMBRE");
 			                if (tipo.equalsIgnoreCase("Supervisor")) {
 			                    JOptionPane.showMessageDialog(null, "Bienvenido, supervisor " + nombre);
-			                    VentanaSupervisor vSup = new VentanaSupervisor();
+			                    VentanaSupervisor vSup = new VentanaSupervisor(VentanaEmpleados.this);
 			                    vSup.setVisible(true);
 			                    dispose();
 			                } else if (tipo.equalsIgnoreCase("Empleado")) {
-			                    JOptionPane.showMessageDialog(null, "Bienvenido, empleado " + dni);
-			                    VentanaEmpleado vEmp = new VentanaEmpleado();
+			                    JOptionPane.showMessageDialog(null, "Bienvenido, empleado " + nombre);
+			                    VentanaEmpleado vEmp = new VentanaEmpleado(VentanaEmpleados.this);
 			                    vEmp.setVisible(true);
 			                    dispose();
 			                }
