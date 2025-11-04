@@ -77,7 +77,7 @@ public class VentanaPrincipal extends JFrame {
 
         
        int fontSize = Math.max(16, screenWidth / 80);
-       Font fuente = new Font("Jokerman", Font.BOLD, fontSize);
+       Font fuente = new Font("Impact", Font.PLAIN, fontSize);
       
        JButton btnSoyCliente = new JButton("SOY CLIENTE");
        btnSoyCliente.setFocusPainted(false);  
@@ -140,7 +140,7 @@ public class VentanaPrincipal extends JFrame {
         gbc2.gridy = 0;
         
         panel.add(btnSoyTrabajador, gbc2);
-        Font fuenteBotones = new Font("Impact", Font.PLAIN, 19);
+        Font fuenteBotones = new Font("Impact", Font.PLAIN, fontSize);
         btnSoyCliente.setFont(fuenteBotones);
         //aqui he cambiado la dimension del boton de tabajador para igualarlo al de cliente
         btnSoyTrabajador.setFont(new Font("Goudy Old Style", Font.PLAIN, 19));
