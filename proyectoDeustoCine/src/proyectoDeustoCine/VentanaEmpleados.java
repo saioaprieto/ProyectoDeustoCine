@@ -88,7 +88,7 @@ public class VentanaEmpleados extends JFrame {
 			                    dispose();
 			                } else if (tipo.equalsIgnoreCase("Empleado")) {
 			                    JOptionPane.showMessageDialog(null, "Bienvenido, empleado " + dni);
-			                    VentanaEmpleado vEmp = new VentanaEmpleado();
+			                    VentanaTrabajador vEmp = new VentanaTrabajador();
 			                    vEmp.setVisible(true);
 			                    dispose();
 			                }
