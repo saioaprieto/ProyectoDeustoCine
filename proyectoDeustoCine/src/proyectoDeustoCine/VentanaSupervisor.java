@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
-<<<<<<< HEAD
+
 import javax.swing.JLabel;
 import java.awt.FlowLayout;
 import javax.swing.JButton;
@@ -14,8 +14,6 @@ import javax.swing.SwingConstants;
 import java.awt.GridLayout;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
-=======
->>>>>>> branch 'main' of ssh://git@github.com/saioaprieto/ProyectoDeustoCine.git
 
 public class VentanaSupervisor extends JFrame {
 
@@ -51,7 +49,7 @@ public class VentanaSupervisor extends JFrame {
 
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
-<<<<<<< HEAD
+
 		
 		JPanel panelNorte = new JPanel();
 		FlowLayout flowLayout = (FlowLayout) panelNorte.getLayout();
@@ -89,8 +87,7 @@ public class VentanaSupervisor extends JFrame {
 		
 		table = new JTable();
 		scrollPane.setViewportView(table);
-=======
->>>>>>> branch 'main' of ssh://git@github.com/saioaprieto/ProyectoDeustoCine.git
+
 	}
 
 }

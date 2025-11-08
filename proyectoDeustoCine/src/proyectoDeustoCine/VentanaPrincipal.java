@@ -125,7 +125,7 @@ public class VentanaPrincipal extends JFrame {
         btnSoyTrabajador.addActionListener(new ActionListener() {
        	public void actionPerformed(ActionEvent e) {
        		VentanaPrincipal.this.setVisible(false);
-       		VentanaEmpleados ventanaEmpleado = new VentanaEmpleados(VentanaPrincipal.this);
+       		VentanaTrabajador ventanaEmpleado = new VentanaTrabajador(VentanaPrincipal.this);
        		ventanaEmpleado.setVisible(true);
        	}
        });
