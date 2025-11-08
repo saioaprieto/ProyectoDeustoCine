@@ -26,7 +26,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class VentanaEmpleados extends JFrame {
+public class VentanaTrabajador extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -39,7 +39,7 @@ public class VentanaEmpleados extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public VentanaEmpleados(VentanaPrincipal parent) {
+	public VentanaTrabajador(VentanaPrincipal parent) {
 		this.parent = parent;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -88,8 +88,8 @@ public class VentanaEmpleados extends JFrame {
 			                    dispose();
 			                } else if (tipo.equalsIgnoreCase("Empleado")) {
 			                    JOptionPane.showMessageDialog(null, "Bienvenido, empleado " + dni);
-			                    VentanaEmpleado vEmp = new VentanaEmpleado();
-			                    vEmp.setVisible(true);
+			                    VentanaTrabajador vTra = new VentanaTrabajador(parent);
+			                    vTra.setVisible(true);
 			                    dispose();
 			                }
 			            } else {
@@ -111,8 +111,8 @@ public class VentanaEmpleados extends JFrame {
 		JButton btnCancelar = new JButton("Cancelar");
 		btnCancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				VentanaEmpleados.this.setVisible(false);
-				VentanaEmpleados.this.parent.setVisible(true);
+				VentanaTrabajador.this.setVisible(false);
+				VentanaTrabajador.this.parent.setVisible(true);
 			}
 		});
 		btnCancelar.setFont(new Font("Verdana", Font.PLAIN, 14));
