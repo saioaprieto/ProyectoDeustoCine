@@ -10,12 +10,12 @@ public class VentanaEmpleado extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private VentanaEmpleados parent;
+	private VentanaTrabajador parent;
 
 	/**
 	 * Create the frame.
 	 */
-	public VentanaEmpleado(VentanaEmpleados parent) {
+	public VentanaEmpleado(VentanaTrabajador parent) {
 		this.parent = parent;
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

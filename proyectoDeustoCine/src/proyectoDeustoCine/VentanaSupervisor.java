@@ -21,9 +21,9 @@ public class VentanaSupervisor extends JFrame {
 	private JPanel contentPane;
 	private JLabel lblTitulo;
 	private JTable table;
-	private VentanaEmpleados parent;
+	private VentanaTrabajador parent;
 	private String nombreSupervisor;
-	public VentanaSupervisor(VentanaEmpleados parent, String nombreSupervisor) {
+	public VentanaSupervisor(VentanaTrabajador parent, String nombreSupervisor) {
 		this.parent = parent;
 		this.nombreSupervisor = nombreSupervisor;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
