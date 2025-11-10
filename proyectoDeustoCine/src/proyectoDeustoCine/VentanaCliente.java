@@ -22,6 +22,7 @@ public class VentanaCliente extends JFrame {
 	/**
 	 * Create the frame.
 	 */
+	//hola
 	 public VentanaCliente(VentanaPrincipal parent) {
 	       this.parent = parent;
 	       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

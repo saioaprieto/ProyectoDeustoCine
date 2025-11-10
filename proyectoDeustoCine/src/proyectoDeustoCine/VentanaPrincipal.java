@@ -48,7 +48,7 @@ public class VentanaPrincipal extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-        contentPane = new FondoPanel("src/imagenes/fondo.png");
+        contentPane = new FondoPanel("src/imagenes/Peliculas.jpg");
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         contentPane.setLayout(new BorderLayout());
         setContentPane(contentPane);
@@ -125,11 +125,12 @@ public class VentanaPrincipal extends JFrame {
         btnSoyTrabajador.addActionListener(new ActionListener() {
        	public void actionPerformed(ActionEvent e) {
        		VentanaPrincipal.this.setVisible(false);
-       		VentanaEmpleados ventanaEmpleado = new VentanaEmpleados(VentanaPrincipal.this);
+       		VentanaTrabajador ventanaEmpleado = new VentanaTrabajador(VentanaPrincipal.this);
        		ventanaEmpleado.setVisible(true);
        	}
        });
 
+        
 
        
         GridBagConstraints gbc2 = new GridBagConstraints();

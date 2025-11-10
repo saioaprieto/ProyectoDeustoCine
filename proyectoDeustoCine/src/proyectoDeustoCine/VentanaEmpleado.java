@@ -17,6 +17,7 @@ public class VentanaEmpleado extends JFrame {
 	 */
 	public VentanaEmpleado(VentanaEmpleados parent) {
 		this.parent = parent;
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		contentPane = new JPanel();
