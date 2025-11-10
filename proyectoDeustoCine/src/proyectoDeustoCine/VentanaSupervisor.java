@@ -58,7 +58,7 @@ public class VentanaSupervisor extends JFrame {
 		JPanel panel_1 = new JPanel();
 		panelSur.add(panel_1);
 		
-		JButton btnNewButton = new JButton("Cerrar Sesion");
+		JButton btnNewButton = new JButton("Cerrar Sesión");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				

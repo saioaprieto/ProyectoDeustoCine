@@ -8,6 +8,9 @@ import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JButton;
@@ -50,7 +53,18 @@ public class VentanaEmpleado extends JFrame {
 		JPanel panel_4 = new JPanel();
 		panel_1.add(panel_4);
 		
-		JButton btnNewButton_2 = new JButton("Cerrar Sesion");
+		JButton btnNewButton_2 = new JButton("Cerrar Sesión");
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				VentanaEmpleado.this.setVisible(false);
+				VentanaEmpleado.this.parent.getTextdni().setText("");
+				VentanaEmpleado.this.parent.getContrasenya().setText("");
+				VentanaEmpleado.this.parent.getBtnAcceder().setEnabled(false);
+				VentanaEmpleado.this.parent.setVisible(true);
+				
+			}
+		});
 		panel_4.add(btnNewButton_2);
 		
 		JPanel panel_2 = new JPanel();
