@@ -26,6 +26,7 @@ public class VentanaCliente extends JFrame {
 	       this.parent = parent;
 	       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	       setBounds(100, 100, 750, 750);
+	       //prueba jone
 	      
 	       contentPane = new FondoPanel("/deustoCineGrupal/src/imagenPortada/ventanaPeliculas.jpg");
 	       contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

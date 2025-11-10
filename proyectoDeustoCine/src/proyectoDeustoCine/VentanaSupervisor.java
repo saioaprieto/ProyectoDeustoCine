@@ -13,7 +13,6 @@ public class VentanaSupervisor extends JFrame {
 	private VentanaEmpleados parent;
 
 
-
 	/**
 	 * Create the frame.
 	 */
