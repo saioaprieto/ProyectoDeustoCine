@@ -30,15 +30,26 @@ public class VentanaTrabajador extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private VentanaPrincipal parent; 
+	private static VentanaPrincipal parent; 
 	private JTextField textdni;
 	private JPasswordField contrasenya;
 	private JButton btnAcceder;
 
+	public static void main(String[] args) {
+		EventQueue eventQueue = new EventQueue();
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					VentanaTrabajador frame = new VentanaTrabajador(parent);
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 
-	/**
-	 * Create the frame.
-	 */
+	
 	public VentanaTrabajador(VentanaPrincipal parent) {
 		this.parent = parent;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -83,7 +94,7 @@ public class VentanaTrabajador extends JFrame {
 			                String nombre = rs.getString("NOMBRE");
 			                if (tipo.equalsIgnoreCase("Supervisor")) {
 			                    JOptionPane.showMessageDialog(null, "Bienvenido, supervisor " + nombre);
-			                    VentanaSupervisor vSup = new VentanaSupervisor();
+			                    VentanaSupervisor vSup = new VentanaSupervisor(VentanaTrabajador.this, nombre);
 			                    vSup.setVisible(true);
 			                    dispose();
 			                } else if (tipo.equalsIgnoreCase("Empleado")) {
