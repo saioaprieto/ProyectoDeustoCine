@@ -14,6 +14,8 @@ import java.awt.GridLayout;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import java.awt.Font;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class VentanaSupervisor extends JFrame {
 
@@ -57,6 +59,17 @@ public class VentanaSupervisor extends JFrame {
 		panelSur.add(panel_1);
 		
 		JButton btnNewButton = new JButton("Cerrar Sesion");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				VentanaSupervisor.this.setVisible(false);
+				VentanaSupervisor.this.parent.getTextdni().setText("");
+				VentanaSupervisor.this.parent.getContrasenya().setText("");
+				VentanaSupervisor.this.parent.getBtnAcceder().setEnabled(false);
+				VentanaSupervisor.this.parent.setVisible(true);
+				
+			}
+		});
 		panel_1.add(btnNewButton);
 		
 		JPanel panelDerecho = new JPanel();

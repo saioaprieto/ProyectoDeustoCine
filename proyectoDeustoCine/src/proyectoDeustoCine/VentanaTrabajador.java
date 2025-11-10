@@ -179,4 +179,34 @@ public class VentanaTrabajador extends JFrame {
 		contrasenya.setFont(new Font("Verdana", Font.PLAIN, 16));
 		panelCentral.add(contrasenya);
 	}
+
+
+	public JButton getBtnAcceder() {
+		return btnAcceder;
+	}
+
+
+	public void setBtnAcceder(JButton btnAcceder) {
+		this.btnAcceder = btnAcceder;
+	}
+
+
+	public JTextField getTextdni() {
+		return textdni;
+	}
+
+
+	public void setTextdni(JTextField textdni) {
+		this.textdni = textdni;
+	}
+
+
+	public JPasswordField getContrasenya() {
+		return contrasenya;
+	}
+
+
+	public void setContrasenya(JPasswordField contrasenya) {
+		this.contrasenya = contrasenya;
+	}
 }
