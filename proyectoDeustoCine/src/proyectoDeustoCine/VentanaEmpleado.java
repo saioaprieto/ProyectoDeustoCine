@@ -35,7 +35,7 @@ public class VentanaEmpleado extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
-		contentPane.setLayout(new BorderLayout(0, 0));
+		contentPane.setLayout(new BorderLayout(10, 10));
 		
 		JPanel panel = new JPanel();
 		contentPane.add(panel, BorderLayout.NORTH);
@@ -53,8 +53,8 @@ public class VentanaEmpleado extends JFrame {
 		JPanel panel_4 = new JPanel();
 		panel_1.add(panel_4);
 		
-		JButton btnNewButton_2 = new JButton("Cerrar Sesión");
-		btnNewButton_2.addActionListener(new ActionListener() {
+		JButton btnCerrarSesion = new JButton("Cerrar Sesión");
+		btnCerrarSesion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 				VentanaEmpleado.this.setVisible(false);
@@ -65,17 +65,17 @@ public class VentanaEmpleado extends JFrame {
 				
 			}
 		});
-		panel_4.add(btnNewButton_2);
+		panel_4.add(btnCerrarSesion);
 		
 		JPanel panel_2 = new JPanel();
 		contentPane.add(panel_2, BorderLayout.EAST);
-		panel_2.setLayout(new GridLayout(2, 0, 0, 0));
+		panel_2.setLayout(new GridLayout(2, 0, 100, 100));
 		
-		JButton btnNewButton = new JButton("Solicitar cambio");
-		panel_2.add(btnNewButton);
+		JButton btnSolicitar = new JButton("Solicitar cambio");
+		panel_2.add(btnSolicitar);
 		
-		JButton btnNewButton_1 = new JButton("Visualizar");
-		panel_2.add(btnNewButton_1);
+		JButton btnVisualizar = new JButton("Visualizar");
+		panel_2.add(btnVisualizar);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		contentPane.add(scrollPane, BorderLayout.CENTER);
