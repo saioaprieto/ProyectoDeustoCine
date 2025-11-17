@@ -84,8 +84,8 @@ public class VentanaPrincipal extends JFrame {
        btnSoyCliente.addActionListener(new ActionListener() {
        	public void actionPerformed(ActionEvent e) {
        		VentanaPrincipal.this.setVisible(false);
-       		VentanaCliente ventanaCliente = new VentanaCliente(VentanaPrincipal.this);
-       		ventanaCliente.setVisible(true);
+       		VentanaPeliculas mivent1 = new VentanaPeliculas(VentanaPrincipal.this);
+       		mivent1.setVisible(true);
 			
 				
        	}
