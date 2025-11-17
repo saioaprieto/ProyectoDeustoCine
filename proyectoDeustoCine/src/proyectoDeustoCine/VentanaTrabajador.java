@@ -26,20 +26,31 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class VentanaEmpleados extends JFrame {
+public class VentanaTrabajador extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private VentanaPrincipal parent; 
+	private static VentanaPrincipal parent; 
 	private JTextField textdni;
 	private JPasswordField contrasenya;
 	private JButton btnAcceder;
 
+	public static void main(String[] args) {
+		EventQueue eventQueue = new EventQueue();
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					VentanaTrabajador frame = new VentanaTrabajador(parent);
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 
-	/**
-	 * Create the frame.
-	 */
-	public VentanaEmpleados(VentanaPrincipal parent) {
+	
+	public VentanaTrabajador(VentanaPrincipal parent) {
 		this.parent = parent;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -83,12 +94,12 @@ public class VentanaEmpleados extends JFrame {
 			                String nombre = rs.getString("NOMBRE");
 			                if (tipo.equalsIgnoreCase("Supervisor")) {
 			                    JOptionPane.showMessageDialog(null, "Bienvenido, supervisor " + nombre);
-			                    VentanaSupervisor vSup = new VentanaSupervisor();
+			                    VentanaSupervisor vSup = new VentanaSupervisor(VentanaTrabajador.this, nombre);
 			                    vSup.setVisible(true);
 			                    dispose();
 			                } else if (tipo.equalsIgnoreCase("Empleado")) {
-			                    JOptionPane.showMessageDialog(null, "Bienvenido, empleado " + dni);
-			                    VentanaEmpleado vEmp = new VentanaEmpleado();
+			                    JOptionPane.showMessageDialog(null, "Bienvenido, empleado " + nombre);
+			                    VentanaEmpleado vEmp = new VentanaEmpleado(VentanaTrabajador.this);
 			                    vEmp.setVisible(true);
 			                    dispose();
 			                }
@@ -111,8 +122,8 @@ public class VentanaEmpleados extends JFrame {
 		JButton btnCancelar = new JButton("Cancelar");
 		btnCancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				VentanaEmpleados.this.setVisible(false);
-				VentanaEmpleados.this.parent.setVisible(true);
+				VentanaTrabajador.this.setVisible(false);
+				VentanaTrabajador.this.parent.setVisible(true);
 			}
 		});
 		btnCancelar.setFont(new Font("Verdana", Font.PLAIN, 14));
@@ -167,5 +178,35 @@ public class VentanaEmpleados extends JFrame {
 		});
 		contrasenya.setFont(new Font("Verdana", Font.PLAIN, 16));
 		panelCentral.add(contrasenya);
+	}
+
+
+	public JButton getBtnAcceder() {
+		return btnAcceder;
+	}
+
+
+	public void setBtnAcceder(JButton btnAcceder) {
+		this.btnAcceder = btnAcceder;
+	}
+
+
+	public JTextField getTextdni() {
+		return textdni;
+	}
+
+
+	public void setTextdni(JTextField textdni) {
+		this.textdni = textdni;
+	}
+
+
+	public JPasswordField getContrasenya() {
+		return contrasenya;
+	}
+
+
+	public void setContrasenya(JPasswordField contrasenya) {
+		this.contrasenya = contrasenya;
 	}
 }
