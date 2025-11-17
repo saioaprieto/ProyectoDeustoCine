@@ -54,3 +54,4 @@ public class VentanaPeliculas extends JFrame {
 	}
 
 }
+
