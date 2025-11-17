@@ -49,18 +49,7 @@ public class VentanaPeliculas extends JFrame {
 		contentPane.add(panel, BorderLayout.CENTER);
 		panel.setLayout(new GridLayout(1, 0, 0, 0));
 	}
-	class FondoPanel extends JPanel {
-	    private Image imagen;
-
-	    public FondoPanel(String ruta) {
-	        imagen = new ImageIcon(ruta).getImage();
-	    }
-
-	    @Override
-	    protected void paintComponent(Graphics g) {
-	        super.paintComponent(g);
-	        g.drawImage(imagen, 0, 0, getWidth(), getHeight(), this);
-	    }
+	
 	   
 	}
 
