@@ -1,4 +1,4 @@
-package src.proyectoDeustoCine;
+package proyectoDeustoCine;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

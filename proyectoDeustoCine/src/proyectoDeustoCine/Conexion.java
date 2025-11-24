@@ -1,4 +1,4 @@
-package src.proyectoDeustoCine;
+package proyectoDeustoCine;
 
 import java.sql.Connection;
 	import java.sql.DriverManager;
