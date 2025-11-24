@@ -1,4 +1,4 @@
-package proyectoDeustoCine;
+package src.proyectoDeustoCine;
 
 import java.awt.EventQueue;
 

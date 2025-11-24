@@ -1,4 +1,4 @@
-package proyectoDeustoCine;
+
 
 import java.awt.EventQueue;
 
@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import proyectoDeustoCine.VentanaPrincipal.FondoPanel;
+import src.proyectoDeustoCine.VentanaPrincipal;
 
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
