@@ -1,5 +1,4 @@
 package proyectoDeustoCine;
-
 import java.awt.EventQueue;
 
 import javax.swing.ImageIcon;
@@ -7,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import proyectoDeustoCine.VentanaPrincipal;
 import proyectoDeustoCine.VentanaPrincipal.FondoPanel;
 
 import java.awt.BorderLayout;
@@ -33,7 +33,7 @@ public class VentanaPeliculas extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       //  setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-        contentPane = new FondoPanel("C://Users//saioa.prieto//git//ProyectoDeustoCine//proyectoDeustoCine//src////imagenCineee.png");
+        contentPane = new FondoPanel("imagenCineee.png");
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         contentPane.setLayout(new BorderLayout());
         setContentPane(contentPane);
@@ -49,9 +49,9 @@ public class VentanaPeliculas extends JFrame {
 		contentPane.add(panel, BorderLayout.CENTER);
 		panel.setLayout(new GridLayout(1, 0, 0, 0));
 	}
-	
-	   
-	}
-
 }
+	   
+	
+
+
 
