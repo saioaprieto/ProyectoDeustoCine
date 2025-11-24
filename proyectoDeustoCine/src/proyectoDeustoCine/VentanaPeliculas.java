@@ -1,5 +1,4 @@
 package proyectoDeustoCine;
-
 import java.awt.EventQueue;
 
 import javax.swing.ImageIcon;
@@ -7,7 +6,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import proyectoDeustoCine.VentanaPrincipal.FondoPanel;
+import src.proyectoDeustoCine.VentanaPrincipal;
+import src.proyectoDeustoCine.VentanaPrincipal.FondoPanel;
 
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
@@ -51,7 +51,7 @@ public class VentanaPeliculas extends JFrame {
 	}
 	
 	   
-	}
+	
 
 
 
