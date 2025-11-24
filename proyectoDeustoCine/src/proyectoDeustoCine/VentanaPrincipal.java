@@ -45,6 +45,7 @@ public class VentanaPrincipal extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaPrincipal() {
+	
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
 
@@ -84,8 +85,8 @@ public class VentanaPrincipal extends JFrame {
        btnSoyCliente.addActionListener(new ActionListener() {
        	public void actionPerformed(ActionEvent e) {
        		VentanaPrincipal.this.setVisible(false);
-       		VentanaCliente ventanaCliente = new VentanaCliente(VentanaPrincipal.this);
-       		ventanaCliente.setVisible(true);
+       		VentanaPeliculas mivent1 = new VentanaPeliculas(VentanaPrincipal.this);
+       		mivent1.setVisible(true);
 			
 				
        	}

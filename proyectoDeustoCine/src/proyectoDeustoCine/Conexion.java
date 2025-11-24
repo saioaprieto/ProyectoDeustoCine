@@ -66,10 +66,7 @@ import java.util.ArrayList;
 		    } catch (SQLException e) {
 		        e.printStackTrace();
 		    }
-		return lista;
-		
-			
-		
+		return lista;	
 	}
 
 	public Connection getConnection() {

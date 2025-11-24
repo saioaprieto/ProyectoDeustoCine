@@ -5,7 +5,10 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+
+import com.mysql.cj.x.protobuf.MysqlxCrud.Collection;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -21,6 +24,7 @@ import javax.swing.JScrollPane;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.awt.event.ActionEvent;
 
 public class VentanaSupervisor extends JFrame {
@@ -122,11 +126,50 @@ public class VentanaSupervisor extends JFrame {
 
 	        ArrayList<Trabajador> lista = db.obtenerPersonas();
 
-	        asignarTrabajador(lista);
+//	        asignarTrabajador(lista);
 
 	        db.close();
-		
+	       
 	}
+//	private void activarColoresDNI() {
+//
+//	    table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+//
+//	        @Override
+//	        public Component getTableCellRendererComponent(
+//	                JTable table, Object value, boolean isSelected, boolean hasFocus,
+//	                int row, int column) {
+//
+//	            Component c = super.getTableCellRendererComponent(
+//	                    table, value, isSelected, hasFocus, row, column);
+//
+//	            if (value == null) {
+//	                c.setBackground(Color.WHITE);
+//	                return c;
+//	            }
+//
+//	            String texto = value.toString();
+//
+//	            // Si hay dos DNIs (caso BAR)
+//	            if (texto.contains("\n")) {
+//	                String[] partes = texto.split("\n");
+//	                c.setBackground(colorParaDNI(partes[0])); // color del primero
+//	            } else {
+//	                c.setBackground(colorParaDNI(texto));
+//	            }
+//
+//	            return c;
+//	        }
+//	    });
+//	}
+//	private Color colorParaDNI(String dni) {
+//	    return new Color(
+//	        (dni.hashCode() & 0xFF0000) >> 16,
+//	        (dni.hashCode() & 0x00FF00) >> 8,
+//	        (dni.hashCode() & 0x0000FF)
+//	    );
+//	}
+
 	private class RendererHorario extends javax.swing.table.DefaultTableCellRenderer {
 
 	    @Override
@@ -179,70 +222,81 @@ public class VentanaSupervisor extends JFrame {
 
 	    return new Color(r, g, b);
 	}
-
-
-	public void asignarTrabajador(ArrayList<Trabajador> trabajadores) {
+	public void AsignarTrabajador2(ArrayList<Trabajador>lista ) {
 		 DefaultTableModel modelo = (DefaultTableModel) table.getModel();
-
-		    for (int fila = 0; fila < modelo.getRowCount(); fila++) {
-
-		        String tarea = modelo.getValueAt(fila, 0).toString();
-
-		        for (int col = 1; col < modelo.getColumnCount(); col++) {
-
-		            Object raw = modelo.getValueAt(fila, col);
-
-		            if (raw == null) continue;
-
-		            String texto = raw.toString();
-
-		            // Sacar solo el horario (si antes ya había HTML)
-		            String horario = texto.contains("<html>")
-		                    ? texto.replaceAll("<[^>]*>", "")     // quitar etiquetas HTML
-		                           .trim().split("\\s+")[0]        // recortar todo salvo el horario
-		                    : texto;
-
-		            // -------- BAR (2 personas) --------
-		            if (tarea.equalsIgnoreCase("BAR")) {
-
-		                Trabajador t1 = trabajadores.get((int)(Math.random() * trabajadores.size()));
-		                Trabajador t2 = trabajadores.get((int)(Math.random() * trabajadores.size()));
-
-		                while (t1.getCodico_dni().equals(t2.getCodico_dni())) {
-		                    t2 = trabajadores.get((int)(Math.random() * trabajadores.size()));
-		                }
-
-		                String celda =
-		                    "<html>"
-		                  + "<p style='font-size:14px; font-weight:bold; margin:0;'>" + horario + "</p>"
-		                  + "<p style='font-size:13px; margin:0;'>" 
-		                  + t1.getCodico_dni() + "<br>" 
-		                  + t2.getCodico_dni() + "</p>"
-		                  + "</html>";
-
-		                modelo.setValueAt(celda, fila, col);
-		            }
-
-		            // -------- RESTO (1 persona) --------
-		            else {
-
-		                Trabajador t = trabajadores.get((int)(Math.random() * trabajadores.size()));
-
-		                String celda =
-		                    "<html>"
-		                  + "<p style='font-size:14px; font-weight:bold; margin:0;'>" + horario + "</p>"
-		                  + "<p style='font-size:13px; margin:0;'>" 
-		                  + t.getCodico_dni() + "</p>"
-		                  + "</html>";
-
-		                modelo.setValueAt(celda, fila, col);
-		            }
+		
+		 for(int columna = 0; columna < modelo.getColumnCount(); columna ++) {
+			  Collections.shuffle(lista);
+			  for(int fila = 0; fila < modelo.getRowCount(); fila ++) {
+				  
+			  }
+			 
+		 }
 	}
-		        
 
-}
+//	public void asignarTrabajador(ArrayList<Trabajador> trabajadores) {
+//		
+//		    for (int fila = 0; fila < modelo.getRowCount(); fila++) {
+//
+//		        String tarea = modelo.getValueAt(fila, 0).toString();
+//
+//		        for (int col = 1; col < modelo.getColumnCount(); col++) {
+//
+//		            Object raw = modelo.getValueAt(fila, col);
+//
+//		            if (raw == null) continue;
+//
+//		            String texto = raw.toString();
+//
+////		             Sacar solo el horario (si antes ya había HTML)
+//		            String horario = texto.contains("<html>")
+//		                    ? texto.replaceAll("<[^>]*>", "")     // quitar etiquetas HTML
+//		                           .trim().split("\\s+")[0]        // recortar todo salvo el horario
+//		                    : texto;
+//
+//		            // -------- BAR (2 personas) --------
+//		            if (tarea.equalsIgnoreCase("BAR")) {
+//
+//		                Trabajador t1 = trabajadores.get((int)(Math.random() * trabajadores.size()));
+//		                Trabajador t2 = trabajadores.get((int)(Math.random() * trabajadores.size()));
+//
+//		                while (t1.getCodico_dni().equals(t2.getCodico_dni())) {
+//		                    t2 = trabajadores.get((int)(Math.random() * trabajadores.size()));
+//		                }
+//
+//		                String celda =
+//		                    "<html>"
+//		                  + "<p style='font-size:14px; font-weight:bold; margin:0;'>" + horario + "</p>"
+//		                  + "<p style='font-size:13px; margin:0;'>" 
+//		                  + t1.getCodico_dni() + "<br>" 
+//		                  + t2.getCodico_dni() + "</p>"
+//		                  + "</html>";
+//
+//		                modelo.setValueAt(celda, fila, col);
+//		            }
+//
+//		            // -------- RESTO (1 persona) --------
+//		            else {
+//
+//		                Trabajador t = trabajadores.get((int)(Math.random() * trabajadores.size()));
+//
+//		                String celda =
+//		                    "<html>"
+//		                  + "<p style='font-size:14px; font-weight:bold; margin:0;'>" + horario + "</p>"
+//		                  + "<p style='font-size:13px; margin:0;'>" 
+//		                  + t.getCodico_dni() + "</p>"
+//		                  + "</html>";
+//
+//		                modelo.setValueAt(celda, fila, col);
+//		            }
+//	}
+//		        
+//
+//}
 		    
-		    
-	}
+	
+    
+	
 }
+
 	
