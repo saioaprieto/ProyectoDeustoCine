@@ -7,7 +7,6 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import proyectoDeustoCine.VentanaPrincipal;
-import proyectoDeustoCine.VentanaPrincipal.FondoPanel;
 
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
@@ -21,7 +20,6 @@ import java.awt.Image;
 public class VentanaPeliculas extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
 	private VentanaPrincipal parent; 
 
 	
@@ -33,7 +31,8 @@ public class VentanaPeliculas extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       //  setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-		contentPane = new FondoPanel("imagenes/Pelimag.png");
+		
+		JPanel contentPane = crearPanelConFondo("imagenes/Pelimag.png");
 
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         contentPane.setLayout(new BorderLayout());
@@ -49,20 +48,17 @@ public class VentanaPeliculas extends JFrame {
 		
 	
 	}
-	class FondoPanel extends JPanel {
-	    private Image imagen;
+	private JPanel crearPanelConFondo(String ruta) {
+	    Image img = new ImageIcon(ruta).getImage();
 
-	    public FondoPanel(String ruta) {
-	        imagen = new ImageIcon(getClass().getClassLoader().getResource(ruta)).getImage();
-	    }
-
-	    @Override
-	    protected void paintComponent(Graphics g) {
-	        super.paintComponent(g);
-	        g.drawImage(imagen, 0, 0, getWidth(), getHeight(), this);
-	    }
+	    return new JPanel() {
+	        @Override
+	        protected void paintComponent(Graphics g) {
+	            super.paintComponent(g);
+	            g.drawImage(img, 0, 0, getWidth(), getHeight(), this);
+	        }
+	    };
 	}
-
 }
 	   
 	
