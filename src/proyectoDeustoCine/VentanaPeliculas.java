@@ -33,7 +33,7 @@ public class VentanaPeliculas extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       //  setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-        contentPane = new FondoPanel("imagenCineee.png");
+      //  contentPane = new FondoPanel("imagenCineee.png");
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         contentPane.setLayout(new BorderLayout());
         setContentPane(contentPane);
