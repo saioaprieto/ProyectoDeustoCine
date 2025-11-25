@@ -126,8 +126,8 @@ public class VentanaPrincipal extends JFrame {
         btnSoyTrabajador.addActionListener(new ActionListener() {
        	public void actionPerformed(ActionEvent e) {
        		VentanaPrincipal.this.setVisible(false);
-       		VentanaTrabajador ventanaEmpleado = new VentanaTrabajador(VentanaPrincipal.this);
-       		ventanaEmpleado.setVisible(true);
+       		VentanaTrabajador ventanaTrabajador = new VentanaTrabajador(VentanaPrincipal.this);
+       		ventanaTrabajador.setVisible(true);
        	}
        });
 
@@ -150,7 +150,7 @@ public class VentanaPrincipal extends JFrame {
         //con esto se iguala el tamaño del boton de trabajador
         btnSoyTrabajador.setPreferredSize(new Dimension(buttonWidth, buttonHeight));
         
-//un cambio
+        //un cambio
         btnSoyTrabajador.setFont(fuente);
         btnSoyTrabajador.setForeground(new Color(0,0,64));
  
@@ -170,6 +170,7 @@ public class VentanaPrincipal extends JFrame {
 		setVisible(true);
 
 	}
+	//esta clase interna hay que cambiar.
 	class FondoPanel extends JPanel {
 	    private Image imagen;
 
