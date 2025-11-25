@@ -14,6 +14,8 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -23,7 +25,7 @@ import javax.swing.border.EmptyBorder;
 public class VentanaPrincipal extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
+    private Image imagen;
 
 	/**
 	 * Launch the application.
@@ -45,44 +47,41 @@ public class VentanaPrincipal extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaPrincipal() {
-	
+		
+		Dimension tamañoPantalla = Toolkit.getDefaultToolkit().getScreenSize();
+		int anchuraPantalla = tamañoPantalla.width;
+		int alturaPantalla = tamañoPantalla.height;
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
-
-        contentPane = new FondoPanel("imagenes/Peliculas.jpg");
-        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-        contentPane.setLayout(new BorderLayout());
-        setContentPane(contentPane);
-		
-        contentPane.setLayout(new BorderLayout());
-
-		JPanel panel = new JPanel(new GridBagLayout());
-		
-		//no quiero que se vea el panel para poder visualizar el fondo de contentPane
-		panel.setOpaque(false);
-		
-		//necesito el tamaño de la pantalla para saber de que tamaño hacer los botones y el espacio entre ellos
-		
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int screenWidth = screenSize.width;
-        int screenHeight = screenSize.height;
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
+       
+		JPanel contentPane = crearPanelConFondo("imagenes/Peliculas.jpg");
+		contentPane.setLayout(new BorderLayout());
+		setContentPane(contentPane);
+       
+		JPanel panelVertical = new JPanel();
+		panelVertical.setOpaque(false);
+		panelVertical.setLayout(new BoxLayout(panelVertical, BoxLayout.Y_AXIS));
         
-//—-->He cambiado las dimensiones de los botones.
-        int buttonWidth = screenWidth / 6;  
-        int buttonHeight = screenHeight / 10;
+       contentPane.add(panelVertical, BorderLayout.CENTER);
+		
+       panelVertical.add(Box.createVerticalGlue());
+       panelVertical.add(Box.createRigidArea(new Dimension(0, 120)));
+       JPanel panelHorizontal = new JPanel();
+       panelHorizontal.setOpaque(false);
+       panelHorizontal.setLayout(new BoxLayout(panelHorizontal, BoxLayout.X_AXIS));
         
-        int espacioHorizontal = screenWidth / 15;  
-        int espacioVertical = screenHeight / 30;
-        
-
-
-        
-       int fontSize = Math.max(16, screenWidth / 80);
-       Font fuente = new Font("Impact", Font.PLAIN, fontSize);
-      
+       int anchuraBoton = anchuraPantalla / 6;  
+       int alturaBoton = alturaPantalla / 10;
+               
        JButton btnSoyCliente = new JButton("SOY CLIENTE");
-       btnSoyCliente.setFocusPainted(false);  
-       btnSoyCliente.addActionListener(new ActionListener() {
+       btnSoyCliente.setFocusPainted(false);
+       btnSoyCliente.setBackground(new Color(245,245,240));
+	   btnSoyCliente.setForeground(new Color(0,0,64));
+	   btnSoyCliente.setPreferredSize(new Dimension(anchuraBoton, alturaBoton));
+	   btnSoyCliente.setMaximumSize(new Dimension(anchuraBoton, alturaBoton));
+	   btnSoyCliente.setMinimumSize(new Dimension(anchuraBoton, alturaBoton));
+	   btnSoyCliente.addActionListener(new ActionListener() {
        	public void actionPerformed(ActionEvent e) {
        		VentanaPrincipal.this.setVisible(false);
        		VentanaPeliculas mivent1 = new VentanaPeliculas(VentanaPrincipal.this);
@@ -92,25 +91,8 @@ public class VentanaPrincipal extends JFrame {
        	}
        });
       
-       btnSoyCliente.setPreferredSize(new Dimension(buttonWidth, buttonHeight));
-       GridBagConstraints gbc1 = new GridBagConstraints();
-       gbc1.insets = new Insets(espacioVertical*6, espacioHorizontal, espacioVertical, espacioHorizontal);
-       gbc1.gridx = 0;
-       gbc1.gridy = 0;
-       panel.add(btnSoyCliente, gbc1);
-      
-       btnSoyCliente.setFont(new Font("Goudy Old Style", Font.PLAIN, 19));
-      
-       
-        
-        //quiero el fondo del boton beige
-        btnSoyCliente.setBackground(new Color(245, 245, 240));
-        //quiero la letra azul marino
-        btnSoyCliente.setForeground(new Color(0,0,64));
-
-
-        
-        btnSoyCliente.addMouseListener(new java.awt.event.MouseAdapter() {
+      btnSoyCliente.setFont(new Font("Goudy Old Style", Font.PLAIN, 19));
+      btnSoyCliente.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btnSoyCliente.setBackground(new Color(200, 200, 190)); 
                 // más oscuro al pasar el ratón
@@ -123,6 +105,11 @@ public class VentanaPrincipal extends JFrame {
         
         JButton btnSoyTrabajador = new JButton("SOY TRABAJADOR");
         btnSoyTrabajador.setFocusPainted(false); 
+        btnSoyTrabajador.setPreferredSize(new Dimension(anchuraBoton, alturaBoton));
+ 	    btnSoyTrabajador.setMaximumSize(new Dimension(anchuraBoton, alturaBoton));
+ 	    btnSoyTrabajador.setMinimumSize(new Dimension(anchuraBoton, alturaBoton));        
+ 	    btnSoyTrabajador.setBackground(new Color(245,245,240));
+	    btnSoyTrabajador.setForeground(new Color(0,0,64));
         btnSoyTrabajador.addActionListener(new ActionListener() {
        	public void actionPerformed(ActionEvent e) {
        		VentanaPrincipal.this.setVisible(false);
@@ -131,32 +118,9 @@ public class VentanaPrincipal extends JFrame {
        	}
        });
 
-        
+      btnSoyTrabajador.setFont(new Font("Goudy Old Style", Font.PLAIN, 19));
 
-       
-        GridBagConstraints gbc2 = new GridBagConstraints();
-        gbc2.insets = new Insets(espacioVertical*6, espacioHorizontal, espacioVertical, espacioHorizontal);
-       
-        
-        gbc2.gridx = 1;
-        gbc2.gridy = 0;
-        
-        panel.add(btnSoyTrabajador, gbc2);
-        Font fuenteBotones = new Font("Impact", Font.PLAIN, fontSize);
-        btnSoyCliente.setFont(fuenteBotones);
-        //aqui he cambiado la dimension del boton de tabajador para igualarlo al de cliente
-        btnSoyTrabajador.setFont(new Font("Goudy Old Style", Font.PLAIN, 19));
-
-        //con esto se iguala el tamaño del boton de trabajador
-        btnSoyTrabajador.setPreferredSize(new Dimension(buttonWidth, buttonHeight));
-        
-        //un cambio
-        btnSoyTrabajador.setFont(fuente);
-        btnSoyTrabajador.setForeground(new Color(0,0,64));
- 
-        btnSoyTrabajador.setBackground(new Color(245, 245, 240));
-
-        btnSoyTrabajador.addMouseListener(new java.awt.event.MouseAdapter() {
+      btnSoyTrabajador.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btnSoyTrabajador.setBackground(new Color(200, 200, 190)); 
             }
@@ -165,25 +129,27 @@ public class VentanaPrincipal extends JFrame {
             }
         });
         
-		contentPane.add(panel, BorderLayout.CENTER);
+        panelHorizontal.add(Box.createHorizontalGlue()); // empuja al centro desde la izquierda
+	    panelHorizontal.add(btnSoyCliente);
+	    panelHorizontal.add(Box.createHorizontalStrut(100)); // espacio entre botones
+	    panelHorizontal.add(btnSoyTrabajador);
+	    panelHorizontal.add(Box.createHorizontalGlue()); // empuja al centro desde la derecha
+		panelVertical.add(panelHorizontal);
+		panelVertical.add(Box.createVerticalGlue());
 		
 		setVisible(true);
 
 	}
-	//esta clase interna hay que cambiar.
-	class FondoPanel extends JPanel {
-	    private Image imagen;
+	private JPanel crearPanelConFondo(String ruta) {
+	    Image img = new ImageIcon(ruta).getImage();
 
-	    public FondoPanel(String ruta) {
-	        imagen = new ImageIcon(ruta).getImage();
-	    }
-
-	    @Override
-	    protected void paintComponent(Graphics g) {
-	        super.paintComponent(g);
-	        g.drawImage(imagen, 0, 0, getWidth(), getHeight(), this);
-	    }
-	   
+	    return new JPanel() {
+	        @Override
+	        protected void paintComponent(Graphics g) {
+	            super.paintComponent(g);
+	            g.drawImage(img, 0, 0, getWidth(), getHeight(), this);
+	        }
+	    };
 	}
 	
 }
