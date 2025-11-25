@@ -33,22 +33,36 @@ public class VentanaPeliculas extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       //  setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-      //  contentPane = new FondoPanel("imagenCineee.png");
+		contentPane = new FondoPanel("imagenes/Pelimag.png");
+
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         contentPane.setLayout(new BorderLayout());
         setContentPane(contentPane);
-        setBounds(100, 100, 450, 300);
+        setBounds(100, 100, 450, 550);
+        
+        JPanel panel = new JPanel();
+        getContentPane().add(panel, BorderLayout.NORTH);
+        
+        JLabel labelTit = new JLabel("ELIGE TU PELICULA FAVORITA");
+        panel.add(labelTit);
         contentPane.setLayout(new BorderLayout());
 		
-		JLabel labelTitulo = new JLabel("¡ELIGE TU PELICULA!\r\n");
-		labelTitulo.setFont(new Font("Perpetua Titling MT", Font.PLAIN, 12));
-		labelTitulo.setHorizontalAlignment(SwingConstants.CENTER);
-		contentPane.add(labelTitulo, BorderLayout.NORTH);
-		
-		JPanel panel = new JPanel();
-		contentPane.add(panel, BorderLayout.CENTER);
-		panel.setLayout(new GridLayout(1, 0, 0, 0));
+	
 	}
+	class FondoPanel extends JPanel {
+	    private Image imagen;
+
+	    public FondoPanel(String ruta) {
+	        imagen = new ImageIcon(getClass().getClassLoader().getResource(ruta)).getImage();
+	    }
+
+	    @Override
+	    protected void paintComponent(Graphics g) {
+	        super.paintComponent(g);
+	        g.drawImage(imagen, 0, 0, getWidth(), getHeight(), this);
+	    }
+	}
+
 }
 	   
 	

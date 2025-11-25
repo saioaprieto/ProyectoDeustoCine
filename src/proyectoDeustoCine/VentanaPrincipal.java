@@ -49,7 +49,7 @@ public class VentanaPrincipal extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-        contentPane = new FondoPanel("src/imagenes/Peliculas.jpg");
+        contentPane = new FondoPanel("imagenes/Peliculas.jpg");
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         contentPane.setLayout(new BorderLayout());
         setContentPane(contentPane);
