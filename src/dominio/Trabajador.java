@@ -1,18 +1,33 @@
-package proyectoDeustoCine;
-
+package dominio;
 public class Trabajador {
 	private String codico_dni;
 	private String nombre;
 	private String apellido;
 	private String telefono;
 	private String salario;
-	public Trabajador(String codico_dni, String nombre, String apellido, String telefono, String salario) {
+	private String contrasena;
+	private String tipo;
+	public Trabajador(String codico_dni, String nombre, String apellido, String telefono, String salario,String contrasena) {
 		super();
 		this.codico_dni = codico_dni;
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.telefono = telefono;
 		this.salario = salario;
+		this.contrasena= contrasena;
+	}
+	public Trabajador(String codico_dni, String nombre, String tipo) {
+		super();
+		this.codico_dni = codico_dni;
+		this.nombre = nombre;
+		this.tipo= tipo;
+		
+	}
+	public String getContrasena() {
+		return contrasena;
+	}
+	public void setContrasena(String contrasena) {
+		this.contrasena = contrasena;
 	}
 	public String getCodico_dni() {
 		return codico_dni;
@@ -48,5 +63,7 @@ public class Trabajador {
 	
 	
 	
-
 }
+
+
+

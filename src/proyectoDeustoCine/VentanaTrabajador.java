@@ -1,62 +1,55 @@
 package proyectoDeustoCine;
-
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
+import dataBase.DataBase;
+import dominio.Trabajador;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-
 import java.awt.Font;
+import java.awt.Graphics;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
 import javax.swing.SwingConstants;
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
 
 public class VentanaTrabajador extends JFrame {
-
+	
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private static VentanaPrincipal parent; 
+	private static VentanaPrincipal parent;
 	private JTextField textdni;
 	private JPasswordField contrasenya;
 	private JButton btnAcceder;
-
-	public static void main(String[] args) {
-		EventQueue eventQueue = new EventQueue();
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VentanaTrabajador frame = new VentanaTrabajador(parent);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
+	private DataBase bases;
 	
-	public VentanaTrabajador(VentanaPrincipal parent) {
+	public VentanaTrabajador(VentanaPrincipal parent, DataBase bases) {
 		this.parent = parent;
+		
+		if (bases == null) {
+	        this.bases = new DataBase();
+	    } else {
+	        this.bases = bases;
+	    }
+		this.bases.inicializarBaseDatos();
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
-		contentPane = new JPanel();
+		
+//		contentPane = new JPanel();
+		contentPane = crearPanelConFondo("imagenes/fondoPeliculas.jpg");
 		contentPane.setBorder(new EmptyBorder(100, 200, 100, 200));
-
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(150, 150));
 		
@@ -64,86 +57,85 @@ public class VentanaTrabajador extends JFrame {
 		contentPane.add(panelSuperior, BorderLayout.NORTH);
 		
 		JLabel lblIntroducir = new JLabel("INTRODUZCA SUS DATOS");
+		lblIntroducir.setForeground(new Color(255, 255, 255));
 		lblIntroducir.setFont(new Font("Verdana", Font.PLAIN, 16));
 		panelSuperior.add(lblIntroducir);
+		panelSuperior.setOpaque(false);
 		
 		JPanel panelInferior = new JPanel();
 		contentPane.add(panelInferior, BorderLayout.SOUTH);
 		
-		btnAcceder = new JButton("Acceder");
+		btnAcceder = new JButton("Acceder") ;
 		btnAcceder.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				 	String dni = textdni.getText();
-			        String contrasena = new String(contrasenya.getPassword());
-				   try {
-			           
-			            Conexion conexion = new Conexion();
-			            conexion.connect();
-			            Connection conn = conexion.getConnection();
-			            if (conn == null) {
-			                JOptionPane.showMessageDialog(null, "No se pudo establecer conexión con la base de datos.");
-			                return;
-			            }
-			            String sql = "SELECT TIPO, NOMBRE FROM TRABAJADORES WHERE COD_DNI = ? AND CONTRASENA = ?";
-			            PreparedStatement stmt = conn.prepareStatement(sql);
-			            stmt.setString(1, dni);
-			            stmt.setString(2, contrasena);
-			            ResultSet rs = stmt.executeQuery();
-			            if (rs.next()) {
-			                String tipo = rs.getString("TIPO");
-			                String nombre = rs.getString("NOMBRE");
-			                if (tipo.equalsIgnoreCase("Supervisor")) {
-			                    JOptionPane.showMessageDialog(null, "Bienvenido, supervisor " + nombre);
-			                    VentanaSupervisor vSup = new VentanaSupervisor(VentanaTrabajador.this, nombre);
-			                    vSup.setVisible(true);
-			                    dispose();
-			                } else if (tipo.equalsIgnoreCase("Empleado")) {
-			                    JOptionPane.showMessageDialog(null, "Bienvenido, empleado " + nombre);
-			                    VentanaEmpleado vEmp = new VentanaEmpleado(VentanaTrabajador.this);
-			                    vEmp.setVisible(true);
-			                    dispose();
-			                }
-			            } else {
-			                JOptionPane.showMessageDialog(null, "DNI o contraseña incorrectos.");
-			            }
-			            rs.close();
-			            stmt.close();
-			            conexion.close();
-			        } catch (SQLException ex) {
-			            ex.printStackTrace();
-			            JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos.");
-			        }
-			    }
-			});
+		@Override
+		    public void actionPerformed(ActionEvent e) {
+		       String dni = textdni.getText();
+		       String contrasena = new String(contrasenya.getPassword());
+		       String[] datos = bases.loginTrabajador(dni, contrasena);
+		       if (datos == null) {
+		          JOptionPane.showMessageDialog(null, "DNI o contraseña incorrectos.");
+		          textdni.setText("");
+		          contrasenya.setText("");
+		            return;
+		        }
+		       String nombre = datos[0];
+		       String tipo = datos[1];
+		       if (tipo.equalsIgnoreCase("Supervisor")) {
+		          JOptionPane.showMessageDialog(null, "Bienvenido, supervisor " + nombre);
+		           new VentanaSupervisor(VentanaTrabajador.this, nombre,VentanaTrabajador.this.bases).setVisible(true);
+		           textdni.setText("");
+		           contrasenya.setText("");
+		       }else {
+		    	  JOptionPane.showMessageDialog(null, "Bienvenido, empleado " + nombre);
+		    	  VentanaSupervisor vs = new VentanaSupervisor(VentanaTrabajador.this, nombre, VentanaTrabajador.this.bases);
+		    	  VentanaEmpleado vempl = new VentanaEmpleado(VentanaTrabajador.this, nombre,dni, vs);
+		    	  vempl.setVisible(true);
+
+
+		           textdni.setText("");
+		           contrasenya.setText("");
+		        }
+		        dispose();
+		    }
+	
+		});
 		btnAcceder.setEnabled(false);
-		btnAcceder.setFont(new Font("Verdana", Font.PLAIN, 14));
+		btnAcceder.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		panelInferior.add(btnAcceder);
+		panelInferior.setOpaque(false);
 		
 		JButton btnCancelar = new JButton("Cancelar");
 		btnCancelar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				VentanaTrabajador.this.setVisible(false);
-				VentanaTrabajador.this.parent.setVisible(true);
+		public void actionPerformed(ActionEvent e) {
+			VentanaTrabajador.this.setVisible(false);
+			VentanaTrabajador.this.parent.setVisible(true);
 			}
 		});
-		btnCancelar.setFont(new Font("Verdana", Font.PLAIN, 14));
+		btnCancelar.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		panelInferior.add(btnCancelar);
 		
 		JPanel panelCentral = new JPanel();
 		contentPane.add(panelCentral, BorderLayout.CENTER);
 		panelCentral.setLayout(new GridLayout(2, 2, 150, 150));
+		panelCentral.setOpaque(false);
 		
 		JLabel lblUsuario = new JLabel("DNI: ");
+		lblUsuario.setForeground(new Color(255, 255, 255));
 		lblUsuario.setHorizontalAlignment(SwingConstants.CENTER);
 		lblUsuario.setBackground(new Color(240, 240, 240));
 		lblUsuario.setFont(new Font("Verdana", Font.PLAIN, 16));
+		lblUsuario.setOpaque(false);
 		panelCentral.add(lblUsuario);
 		
 		textdni = new JTextField();
+		textdni.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			contrasenya.requestFocus();
+			}
+		});
 		textdni.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
-
 				String usuario = textdni.getText();
 				String password = String.copyValueOf(contrasenya.getPassword());
 				if(usuario.equals("")||password.equals("")) {
@@ -158,55 +150,92 @@ public class VentanaTrabajador extends JFrame {
 		textdni.setColumns(10);
 		
 		JLabel lblContrasenya = new JLabel("Contraseña: ");
+		lblContrasenya.setForeground(new Color(255, 255, 255));
 		lblContrasenya.setHorizontalAlignment(SwingConstants.CENTER);
 		lblContrasenya.setFont(new Font("Verdana", Font.PLAIN, 16));
+		lblContrasenya.setOpaque(false);
 		panelCentral.add(lblContrasenya);
 		
 		contrasenya = new JPasswordField();
-		contrasenya.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent e) {
+		contrasenya.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent evt) {
+		        btnAcceder.doClick();
+		    }
+		});
 
-				String usuario = textdni.getText();
-				String password = String.copyValueOf(contrasenya.getPassword());
-				if(usuario.equals("")||password.equals("")) {
-					btnAcceder.setEnabled(false);
-				}else {
-					btnAcceder.setEnabled(true);
-				}
+
+		contrasenya.addKeyListener(new KeyAdapter() {
+		@Override
+		public void keyTyped(KeyEvent e) {
+			String usuario = textdni.getText();
+			String password = String.copyValueOf(contrasenya.getPassword());
+			if(usuario.equals("")||password.equals("")) {
+				btnAcceder.setEnabled(false);
+			}else {
+				btnAcceder.setEnabled(true);
 			}
+		}
 		});
 		contrasenya.setFont(new Font("Verdana", Font.PLAIN, 16));
 		panelCentral.add(contrasenya);
 	}
-
-
 	public JButton getBtnAcceder() {
 		return btnAcceder;
 	}
-
-
 	public void setBtnAcceder(JButton btnAcceder) {
 		this.btnAcceder = btnAcceder;
 	}
-
-
 	public JTextField getTextdni() {
 		return textdni;
 	}
-
-
 	public void setTextdni(JTextField textdni) {
 		this.textdni = textdni;
 	}
-
-
 	public JPasswordField getContrasenya() {
 		return contrasenya;
 	}
-
-
 	public void setContrasenya(JPasswordField contrasenya) {
 		this.contrasenya = contrasenya;
 	}
+	
+	private JPanel crearPanelConFondo(String ruta) {
+	    Image img = new ImageIcon(ruta).getImage();
+	    return new JPanel() {
+	        @Override
+	        protected void paintComponent(Graphics g) {
+	            super.paintComponent(g);
+	            g.drawImage(img, 0, 0, getWidth(), getHeight(), this);
+	        }
+	    };
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

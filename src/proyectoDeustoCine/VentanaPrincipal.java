@@ -13,20 +13,34 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
+import dataBase.DataBase;
 public class VentanaPrincipal extends JFrame {
-
 	private static final long serialVersionUID = 1L;
-    private Image imagen;
-
+   private Image imagen;
+   private static DataBase db;
+	public DataBase getDb() {
+	return db;
+}
+   public static void setDb(DataBase db) {
+	VentanaPrincipal.db = db;
+   }
 	/**
 	 * Launch the application.
 	 */
@@ -34,6 +48,25 @@ public class VentanaPrincipal extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					db = new DataBase();
+	                db.inicializarBaseDatos();
+	                DayOfWeek dia = LocalDate.now().getDayOfWeek();
+	                Map<String, Integer> peliculasMap = new LinkedHashMap<>();
+	                try (Connection conn = db.connect();
+	                     PreparedStatement ps = conn.prepareStatement("SELECT NOMBRE, DURACION FROM PELICULAS");
+	                     ResultSet rs = ps.executeQuery()) {
+
+	                	while (rs.next()) {
+	                        String titulo = rs.getString("NOMBRE");
+	                        int duracion = rs.getInt("DURACION");	                       
+
+	                        peliculasMap.put(titulo, duracion);}
+
+	                } catch (SQLException e) {
+	                    System.err.println("Error al recuperar películas de la base de datos: " + e.getMessage());
+	                    e.printStackTrace();
+	                }
+	                db.generarProgramacionDiaRandom(peliculasMap, dia);
 					VentanaPrincipal frame = new VentanaPrincipal();
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -42,114 +75,86 @@ public class VentanaPrincipal extends JFrame {
 			}
 		});
 	}
-
 	/**
 	 * Create the frame.
 	 */
 	public VentanaPrincipal() {
-		
+
 		Dimension tamañoPantalla = Toolkit.getDefaultToolkit().getScreenSize();
-		int anchuraPantalla = tamañoPantalla.width;
-		int alturaPantalla = tamañoPantalla.height;
-		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setExtendedState(JFrame.MAXIMIZED_BOTH);
-       
-		JPanel contentPane = crearPanelConFondo("imagenes/Peliculas.jpg");
-		contentPane.setLayout(new BorderLayout());
-		setContentPane(contentPane);
-       
-		JPanel panelVertical = new JPanel();
-		panelVertical.setOpaque(false);
-		panelVertical.setLayout(new BoxLayout(panelVertical, BoxLayout.Y_AXIS));
-        
-       contentPane.add(panelVertical, BorderLayout.CENTER);
-		
-       panelVertical.add(Box.createVerticalGlue());
-       panelVertical.add(Box.createRigidArea(new Dimension(0, 120)));
-       JPanel panelHorizontal = new JPanel();
-       panelHorizontal.setOpaque(false);
-       panelHorizontal.setLayout(new BoxLayout(panelHorizontal, BoxLayout.X_AXIS));
-        
-       int anchuraBoton = anchuraPantalla / 6;  
-       int alturaBoton = alturaPantalla / 10;
-               
-       JButton btnSoyCliente = new JButton("SOY CLIENTE");
-       btnSoyCliente.setFocusPainted(false);
-       btnSoyCliente.setBackground(new Color(245,245,240));
-	   btnSoyCliente.setForeground(new Color(0,0,64));
-	   btnSoyCliente.setPreferredSize(new Dimension(anchuraBoton, alturaBoton));
-	   btnSoyCliente.setMaximumSize(new Dimension(anchuraBoton, alturaBoton));
-	   btnSoyCliente.setMinimumSize(new Dimension(anchuraBoton, alturaBoton));
-	   btnSoyCliente.addActionListener(new ActionListener() {
-       	public void actionPerformed(ActionEvent e) {
-       		VentanaPrincipal.this.setVisible(false);
-       		VentanaPeliculas mivent1 = new VentanaPeliculas(VentanaPrincipal.this);
-       		mivent1.setVisible(true);
-			
-				
-       	}
-       });
-      
-      btnSoyCliente.setFont(new Font("Goudy Old Style", Font.PLAIN, 19));
-      btnSoyCliente.addMouseListener(new java.awt.event.MouseAdapter() {
+        int anchuraPantalla = tamañoPantalla.width;
+        int alturaPantalla = tamañoPantalla.height;
+
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+        JPanel contentPane = crearPanelConFondo("imagenes/Peliculas.jpg");
+        contentPane.setLayout(null); 
+        setContentPane(contentPane);
+
+        int anchuraBoton = anchuraPantalla/6;
+        int alturaBoton = alturaPantalla/10;
+
+        JLabel titulo = new JLabel("DEUSTOCINE");
+        titulo.setForeground(Color.WHITE);
+        titulo.setFont(new Font("Goudy Old Style", Font.BOLD, 70));
+        titulo.setBounds((anchuraPantalla/2)-anchuraBoton- 30*10,(alturaPantalla/2)-(alturaBoton /2)-150,800,100);
+
+        contentPane.add(titulo);
+        JButton btnSoyCliente = new JButton("SOY CLIENTE");
+        btnSoyCliente.setFocusPainted(false);
+        btnSoyCliente.setBackground(new Color(245, 245, 240));
+        btnSoyCliente.setForeground(new Color(0, 0, 64));
+        btnSoyCliente.setFont(new Font("Goudy Old Style", Font.PLAIN, 19));
+        btnSoyCliente.setBounds((anchuraPantalla/2)-anchuraBoton- 30,(alturaPantalla/2)-(alturaBoton /2),anchuraBoton,alturaBoton);
+        btnSoyCliente.addActionListener(e -> {
+            VentanaPrincipal.this.setVisible(false);
+            VentanaPeliculas mivent1 = new VentanaPeliculas(VentanaPrincipal.this);
+            mivent1.setVisible(true);
+        });
+        btnSoyCliente.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btnSoyCliente.setBackground(new Color(200, 200, 190)); 
-                // más oscuro al pasar el ratón
+                btnSoyCliente.setBackground(new Color(200, 200, 190));
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 btnSoyCliente.setBackground(new Color(245, 245, 240));
             }
         });
-     
-        
+        contentPane.add(btnSoyCliente);
+
+       
         JButton btnSoyTrabajador = new JButton("SOY TRABAJADOR");
-        btnSoyTrabajador.setFocusPainted(false); 
-        btnSoyTrabajador.setPreferredSize(new Dimension(anchuraBoton, alturaBoton));
- 	    btnSoyTrabajador.setMaximumSize(new Dimension(anchuraBoton, alturaBoton));
- 	    btnSoyTrabajador.setMinimumSize(new Dimension(anchuraBoton, alturaBoton));        
- 	    btnSoyTrabajador.setBackground(new Color(245,245,240));
-	    btnSoyTrabajador.setForeground(new Color(0,0,64));
+        btnSoyTrabajador.setFocusPainted(false);
+        btnSoyTrabajador.setBackground(new Color(245, 245, 240));
+        btnSoyTrabajador.setForeground(new Color(0, 0, 64));
+        btnSoyTrabajador.setFont(new Font("Goudy Old Style",Font.PLAIN,19));
+        btnSoyTrabajador.setBounds((anchuraPantalla/2)+30, (alturaPantalla/2)-(alturaBoton/2),anchuraBoton,alturaBoton);
         btnSoyTrabajador.addActionListener(new ActionListener() {
-       	public void actionPerformed(ActionEvent e) {
-       		VentanaPrincipal.this.setVisible(false);
-       		VentanaTrabajador ventanaTrabajador = new VentanaTrabajador(VentanaPrincipal.this);
-       		ventanaTrabajador.setVisible(true);
-       	}
-       });
+            public void actionPerformed(ActionEvent e) {
+                VentanaPrincipal.this.setVisible(false);
+                VentanaTrabajador ventanaTrabajador = new VentanaTrabajador(VentanaPrincipal.this, db);
+                ventanaTrabajador.setVisible(true);
+            }
+        });
 
-      btnSoyTrabajador.setFont(new Font("Goudy Old Style", Font.PLAIN, 19));
-
-      btnSoyTrabajador.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnSoyTrabajador.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btnSoyTrabajador.setBackground(new Color(200, 200, 190)); 
+                btnSoyTrabajador.setBackground(new Color(200, 200, 190));
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 btnSoyTrabajador.setBackground(new Color(245, 245, 240));
             }
         });
-        
-        panelHorizontal.add(Box.createHorizontalGlue()); // empuja al centro desde la izquierda
-	    panelHorizontal.add(btnSoyCliente);
-	    panelHorizontal.add(Box.createHorizontalStrut(100)); // espacio entre botones
-	    panelHorizontal.add(btnSoyTrabajador);
-	    panelHorizontal.add(Box.createHorizontalGlue()); // empuja al centro desde la derecha
-		panelVertical.add(panelHorizontal);
-		panelVertical.add(Box.createVerticalGlue());
-		
-		setVisible(true);
+        contentPane.add(btnSoyTrabajador);
+    }
 
-	}
-	private JPanel crearPanelConFondo(String ruta) {
-	    Image img = new ImageIcon(ruta).getImage();
-
-	    return new JPanel() {
-	        @Override
-	        protected void paintComponent(Graphics g) {
-	            super.paintComponent(g);
-	            g.drawImage(img, 0, 0, getWidth(), getHeight(), this);
-	        }
-	    };
-	}
-	
+    private JPanel crearPanelConFondo(String ruta) {
+        Image img = new ImageIcon(ruta).getImage();
+        return new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(img, 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+    }
 }
