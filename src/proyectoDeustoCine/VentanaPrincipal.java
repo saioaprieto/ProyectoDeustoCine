@@ -61,7 +61,7 @@ public class VentanaPrincipal extends JFrame {
 	                        int duracion = rs.getInt("DURACION");	                       
 
 	                        peliculasMap.put(titulo, duracion);}
-
+//commit
 	                } catch (SQLException e) {
 	                    System.err.println("Error al recuperar películas de la base de datos: " + e.getMessage());
 	                    e.printStackTrace();
