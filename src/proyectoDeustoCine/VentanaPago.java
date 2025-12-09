@@ -1,244 +1,224 @@
 package proyectoDeustoCine;
-
-
-import java.awt.EventQueue;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import java.awt.*;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.awt.BorderLayout;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.SwingConstants;
-import java.awt.GridLayout;
-import java.awt.Image;
-import javax.swing.JTextField;
-import javax.swing.JCheckBox;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Color;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 public class VentanaPago extends JFrame {
-	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
-	private JTextField txtNombre;
-	private JTextField txtApellidos;
-	private JTextField txtTelefono;
-	private VentanaSala parent3;
-	private JTextField txtCorreo;
-	private JTextField txtNumTarjeta;
-	private JTextField txtCvv;
-	private JTextField txtFecCad;
-	private VentanaPrincipal ventanaPrincipal;
-	private JButton btnPagar;
-
-	private String datosQR;
-	/**
-	 * Create the frame.
-	 */
-	public VentanaPago(VentanaSala parent3, VentanaPrincipal ventanaPrincipal, String datosQR) {
-		 this.ventanaPrincipal = ventanaPrincipal;
-		 this.parent3 = parent3;
-		 this.datosQR=datosQR;
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 732, 527);
-		contentPane = new JPanel();
-		contentPane.setOpaque(false);
-		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setExtendedState(JFrame.MAXIMIZED_BOTH);
-		
-		JPanel contentPane = crearPanelConFondo("imagenes/pagojpg.jpg");
-		contentPane.setBorder(new EmptyBorder(100, 200, 100, 200));
-		setContentPane(contentPane);
-		contentPane.setLayout(new BorderLayout(100, 100));
-		
-		JLabel lblNewLabel = new JLabel("REALIZAR EL PAGO\r\n");
-		lblNewLabel.setForeground(new Color(255, 255, 255));
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 30));
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		contentPane.add(lblNewLabel, BorderLayout.NORTH);
-		
-		JPanel panelSur = new JPanel();
-		contentPane.add(panelSur, BorderLayout.SOUTH);
-		panelSur.setOpaque(false);
-		
-		btnPagar = new JButton("Pagar");
-		btnPagar.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		btnPagar.setEnabled(false);
-		btnPagar.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		        int respuesta = JOptionPane.showConfirmDialog(
-		                parent3,
-		                "PAGO REALIZADO CON EXITO",
-		                "Confirmación",
-		                JOptionPane.OK_CANCEL_OPTION
-		        );
-		        if (respuesta == JOptionPane.OK_OPTION) {
-		            VentanaPago.this.setVisible(false);
-		            VentanaTicket miNuevaVent = new VentanaTicket(VentanaPago.this, ventanaPrincipal, datosQR);
-		            miNuevaVent.setVisible(true);
-		        }
-		    }
-		});
-		panelSur.add(btnPagar);
-		
-		JButton btnCerrar = new JButton("Cerrar");
-		btnCerrar.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		btnCerrar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-		        VentanaPago.this.dispose();
-		        ventanaPrincipal.setVisible(true);
-			}
-		});
-		panelSur.add(btnCerrar);
-		
-		JPanel panelCentral = new JPanel();
-		contentPane.add(panelCentral, BorderLayout.CENTER);
-		panelCentral.setLayout(new GridLayout(7, 2, 20, 20));
-		panelCentral.setOpaque(false);
-		
-		JLabel labelNombre = new JLabel("NOMBRE");
-		labelNombre.setForeground(new Color(255, 255, 255));
-		labelNombre.setHorizontalAlignment(SwingConstants.CENTER);
-		panelCentral.add(labelNombre);
-		
-		txtNombre = new JTextField();
-		txtNombre.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent e) {
-				btnPagar.setEnabled(comprobarTextos());
-			}
-		});
-		panelCentral.add(txtNombre);
-		txtNombre.setColumns(10);
-		
-		JLabel labelApellidos = new JLabel("APELLIDOS");
-		labelApellidos.setForeground(new Color(255, 255, 255));
-		labelApellidos.setHorizontalAlignment(SwingConstants.CENTER);
-		panelCentral.add(labelApellidos);
-		
-		txtApellidos = new JTextField();
-		txtApellidos.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent e) {
-				btnPagar.setEnabled(comprobarTextos());
-			}
-		});
-		panelCentral.add(txtApellidos);
-		txtApellidos.setColumns(10);
-		
-		JLabel labelTelefono = new JLabel("TELEFONO");
-		labelTelefono.setForeground(new Color(255, 255, 255));
-		labelTelefono.setHorizontalAlignment(SwingConstants.CENTER);
-		panelCentral.add(labelTelefono);
-		
-		txtTelefono = new JTextField();
-		txtTelefono.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent e) {
-				btnPagar.setEnabled(comprobarTextos());
-			}
-		});
-		panelCentral.add(txtTelefono);
-		txtTelefono.setColumns(10);
-		
-		JLabel labelCorreo = new JLabel("CORREO ELECTRONICO");
-		labelCorreo.setForeground(new Color(255, 255, 255));
-		labelCorreo.setHorizontalAlignment(SwingConstants.CENTER);
-		panelCentral.add(labelCorreo);
-		
-		txtCorreo = new JTextField();
-		txtCorreo.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent e) {
-				btnPagar.setEnabled(comprobarTextos());
-			}
-		});
-		panelCentral.add(txtCorreo);
-		txtCorreo.setColumns(10);
-		
-		JLabel labelTarjeta = new JLabel("Nº TARJETA DE CREDITO ");
-		labelTarjeta.setForeground(new Color(255, 255, 255));
-		labelTarjeta.setHorizontalAlignment(SwingConstants.CENTER);
-		panelCentral.add(labelTarjeta);
-		
-		txtNumTarjeta = new JTextField();
-		txtNumTarjeta.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent e) {
-				btnPagar.setEnabled(comprobarTextos());
-			}
-		});
-		panelCentral.add(txtNumTarjeta);
-		txtNumTarjeta.setColumns(10);
-		
-		JLabel labelCvv = new JLabel("CVV");
-		labelCvv.setForeground(new Color(255, 255, 255));
-		labelCvv.setHorizontalAlignment(SwingConstants.CENTER);
-		panelCentral.add(labelCvv);
-		
-		txtCvv = new JTextField();
-		txtCvv.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent e) {
-				btnPagar.setEnabled(comprobarTextos());
-			}
-		});
-		panelCentral.add(txtCvv);
-		txtCvv.setColumns(10);
-		
-		JLabel labelFechaCaducidad = new JLabel("FECHA DE CADUCIDAD");
-		labelFechaCaducidad.setForeground(new Color(255, 255, 255));
-		labelFechaCaducidad.setHorizontalAlignment(SwingConstants.CENTER);
-		panelCentral.add(labelFechaCaducidad);
-		
-		txtFecCad = new JTextField();
-		txtFecCad.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent e) {
-				btnPagar.setEnabled(comprobarTextos());
-			}
-		});
-		panelCentral.add(txtFecCad);
-		txtFecCad.setColumns(10);
-	}
-	private JPanel crearPanelConFondo(String ruta) {
-	    Image img = new ImageIcon(ruta).getImage();
-	    return new JPanel() {
-	        @Override
-	        protected void paintComponent(Graphics g) {
-	            super.paintComponent(g);
-	            g.drawImage(img, 0, 0, getWidth(), getHeight(), this);
-	        }
-	    };
-	}
-	
-
-
-	private boolean comprobarTextos() {
-		
-		String nombre = txtNombre.getText();
-		String apellidos = txtApellidos.getText();
-		String correo = txtCorreo.getText();
-		String telefono = txtTelefono.getText();
-		String numTarjeta = txtNumTarjeta.getText();
-		String cvv = txtCvv.getText();
-		String fecCad = txtFecCad.getText();
-		
-		if(nombre.isEmpty()||apellidos.isEmpty()||correo.isEmpty()||telefono.isEmpty()||numTarjeta.isEmpty()||cvv.isEmpty()||fecCad.isEmpty()) {
-			return false;
-		}else {
-			return true;
-		}
-	}
+  private static final long serialVersionUID = 1L;
+  private JPanel contentPane;
+  private JTextField txtNombre;
+  private JTextField txtApellidos;
+  private JTextField txtTelefono;
+  private VentanaSala parent3;
+  private JTextField txtCorreo;
+  private JTextField txtNumTarjeta;
+  private JTextField txtCvv;
+  private JTextField txtFecCad;
+  private VentanaPrincipal ventanaPrincipal;
+  private JButton btnPagar;
+  private String datosQR;
+  private MouseListener oscurecerBtnPagar;
+ 
+  public VentanaPago(VentanaSala parent3, VentanaPrincipal ventanaPrincipal, String datosQR) {
+      this.ventanaPrincipal = ventanaPrincipal;
+      this.parent3 = parent3;
+      this.datosQR = datosQR;
+     
+      setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      setBounds(100, 100, 732, 527);
+      setExtendedState(JFrame.MAXIMIZED_BOTH);
+      contentPane = crearPanelConFondo("imagenes/pagojpg.jpg");
+      contentPane.setBorder(new EmptyBorder(100, 100, 100, 100));
+      contentPane.setLayout(new BorderLayout(100, 100));
+      setContentPane(contentPane);
+     
+      JLabel lblNewLabel = new JLabel("REALIZAR EL PAGO");
+      lblNewLabel.setForeground(Color.WHITE);
+      lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 30));
+      lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+      contentPane.add(lblNewLabel, BorderLayout.NORTH);
+     
+      JPanel panelSur = new JPanel();
+      panelSur.setOpaque(false);
+      contentPane.add(panelSur, BorderLayout.SOUTH);
+     
+      btnPagar = new JButton("Pagar");
+      btnPagar.setFont(new Font("Tahoma", Font.PLAIN, 16));
+      btnPagar.setEnabled(false);
+	   btnPagar.removeMouseListener(oscurecerBtnPagar);
+      btnPagar.setBackground(new Color(240,240,240));
+      btnPagar.addActionListener(new ActionListener() {
+          public void actionPerformed(ActionEvent e) {
+              if (!comprobarTextos()) return;
+              JOptionPane.showMessageDialog(
+                      parent3,
+                      "PAGO REALIZADO CON ÉXITO"
+              );
+              VentanaPago.this.setVisible(false);
+              VentanaTicket miNuevaVent = new VentanaTicket(VentanaPago.this, ventanaPrincipal, datosQR);
+              miNuevaVent.setVisible(true);
+          }
+      });
+      oscurecerBtnPagar = new MouseAdapter() {
+ 	        @Override
+ 	        public void mouseEntered(MouseEvent e) {
+ 	            btnPagar.setBackground(new Color(200, 200, 190));
+ 	        }
+ 	        @Override
+ 	        public void mouseExited(MouseEvent e) {
+ 	            btnPagar.setBackground(new Color(240,240,240));
+ 	        }
+ 	    };
+      panelSur.add(btnPagar);
+     
+      JButton btnCerrar = new JButton("Cerrar");
+      btnCerrar.setFont(new Font("Tahoma", Font.PLAIN, 16));
+      btnCerrar.setBackground(new Color(240,240,240));
+      btnCerrar.addActionListener(new ActionListener() {
+          public void actionPerformed(ActionEvent e) {
+              VentanaPago.this.dispose();
+              ventanaPrincipal.setVisible(true);
+          }
+      });
+      btnCerrar.addMouseListener(new MouseAdapter() {
+ 	        @Override
+ 	        public void mouseEntered(MouseEvent e) {
+ 	            btnCerrar.setBackground(new Color(200, 200, 190));
+ 	        }
+ 	        @Override
+ 	        public void mouseExited(MouseEvent e) {
+ 	            btnCerrar.setBackground(new Color(240,240,240));
+ 	        }
+ 	    });
+      panelSur.add(btnCerrar);
+     
+      JPanel panelCentral = new JPanel();
+      panelCentral.setLayout(new GridLayout(7, 2, 50, 20));
+      panelCentral.setOpaque(false);
+      contentPane.add(panelCentral, BorderLayout.CENTER);
+      //hau jarriet para que funcione el requestFocus, ze bestela etzian iten
+      txtNombre = new JTextField();
+      txtApellidos = new JTextField();
+      txtTelefono = new JTextField();
+      txtCorreo = new JTextField();
+      txtNumTarjeta = new JTextField();
+      txtCvv = new JTextField();
+      txtFecCad = new JTextField();
+     
+      agregarCampo(panelCentral, "NOMBRE", txtNombre, txtApellidos);
+      agregarCampo(panelCentral, "APELLIDOS", txtApellidos, txtTelefono);
+      agregarCampo(panelCentral, "TELEFONO", txtTelefono, txtCorreo);
+      agregarCampo(panelCentral, "CORREO ELECTRONICO", txtCorreo, txtNumTarjeta);
+      agregarCampo(panelCentral, "Nº TARJETA DE CREDITO", txtNumTarjeta, txtCvv);
+      agregarCampo(panelCentral, "CVV", txtCvv, txtFecCad);
+      agregarCampo(panelCentral, "FECHA DE CADUCIDAD", txtFecCad, null);
+  }
+ 
+  public void agregarCampo(JPanel panel, String labelTexto, JTextField campo, JTextField siguiente) {
+      JLabel label = new JLabel(labelTexto);
+      label.setForeground(Color.WHITE);
+      label.setHorizontalAlignment(SwingConstants.RIGHT);
+      panel.add(label);
+      campo.setColumns(20);    
+      campo.setPreferredSize(new Dimension(600, 30));
+      JPanel contenedor = new JPanel(new FlowLayout(FlowLayout.LEFT));
+      contenedor.setOpaque(false);
+      contenedor.add(campo);      
+      campo.addActionListener(evt -> {
+          if (siguiente != null) {
+              siguiente.requestFocus();
+          } else {
+              btnPagar.doClick();
+          }
+      });
+      campo.addKeyListener(new KeyAdapter() {
+          @Override
+          public void keyReleased(KeyEvent e) {
+              btnPagar.setEnabled(camposLlenos());
+              btnPagar.addMouseListener(oscurecerBtnPagar);
+          }
+      });
+      panel.add(contenedor);
+  }
+ 
+  private JPanel crearPanelConFondo(String ruta) {
+      Image img = new ImageIcon(ruta).getImage();
+      return new JPanel() {
+          @Override
+          protected void paintComponent(Graphics g) {
+              super.paintComponent(g);
+              g.drawImage(img, 0, 0, getWidth(), getHeight(), this);
+          }
+      };
+  }
+ 
+  public boolean comprobarTextos() {
+      String nombre = txtNombre.getText();
+      String apellidos = txtApellidos.getText();
+      String correo = txtCorreo.getText();
+      String telefono = txtTelefono.getText();
+      String tarjeta = txtNumTarjeta.getText();
+      String cvv = txtCvv.getText();
+      String fecha = txtFecCad.getText();
+      if (nombre.isEmpty()) {
+          JOptionPane.showMessageDialog(parent3, "Escribe un nombre.");
+          return false;
+      }
+      if (apellidos.isEmpty()) {
+          JOptionPane.showMessageDialog(parent3, "Escribe los apellidos.");
+          return false;
+      }
+      try {
+          Integer.parseInt(telefono);
+          if (telefono.length() != 9) {
+              JOptionPane.showMessageDialog(parent3, "El teléfono debe tener 9 números.");
+              return false;
+          }
+      } catch (Exception e) {
+          JOptionPane.showMessageDialog(parent3, "El teléfono debe ser numérico.");
+          return false;
+      }
+      if (!correo.contains("@") || !correo.contains(".")) {
+          JOptionPane.showMessageDialog(parent3, "Correo incorrecto.");
+          return false;
+      }
+      try {
+          Long.parseLong(tarjeta);
+          if (tarjeta.length() != 16) {
+              JOptionPane.showMessageDialog(parent3, "La tarjeta debe tener 16 números.");
+              return false;
+          }
+      } catch (Exception e) {
+          JOptionPane.showMessageDialog(parent3, "La tarjeta debe ser numérica.");
+          return false;
+      }
+      try {
+          Integer.parseInt(cvv);
+          if (cvv.length() != 3) {
+              JOptionPane.showMessageDialog(parent3, "El CVV debe tener 3 números.");
+              return false;
+          }
+      } catch (Exception e) {
+          JOptionPane.showMessageDialog(parent3, "El CVV debe ser numérico.");
+          return false;
+      }
+      if (fecha.length() != 5 || fecha.charAt(2) != '/') {
+          JOptionPane.showMessageDialog(parent3, "La fecha debe tener formato MM/AA.");
+          return false;
+      }
+      return true;
+  }
+ 
+  public boolean camposLlenos() {
+      return !txtNombre.getText().isEmpty()
+              && !txtApellidos.getText().isEmpty()
+              && !txtTelefono.getText().isEmpty()
+              && !txtCorreo.getText().isEmpty()
+              && !txtNumTarjeta.getText().isEmpty()
+              && !txtCvv.getText().isEmpty()
+              && !txtFecCad.getText().isEmpty();
+  }
 }
-
-
 
 
 

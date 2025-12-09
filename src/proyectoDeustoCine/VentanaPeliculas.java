@@ -20,15 +20,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.Random;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -39,7 +35,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.BoxLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 public class VentanaPeliculas extends JFrame {
@@ -47,33 +42,34 @@ public class VentanaPeliculas extends JFrame {
 	private VentanaPrincipal parent;
 	private List<Proyeccion> proyecciones;
 	private Map<String, JFrame> sesionesAbiertas = new HashMap<>();
+	
 	public VentanaPeliculas(VentanaPrincipal parent) {
 		this.parent = parent;
 	    this.proyecciones = parent.getDb().getProyecciones();
+	 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		JPanel contentPane = crearPanelConFondo("imagenes/fondoPeliculas.jpg");
 	    contentPane.setBorder(new EmptyBorder(50, 5, 5, 5));
 	    setContentPane(contentPane);
 	    contentPane.setLayout(new BorderLayout());
-	    
-	    //titulo
+	   
 	    JPanel panelSuperior = new JPanel();
 	    panelSuperior.setOpaque(false);
 	    contentPane.add(panelSuperior, BorderLayout.NORTH);
-	      
-	    JLabel lblTitulo = new JLabel("ELIGE LA PELICULA QUE DESEES");
+	    
+	    JLabel lblTitulo = new JLabel("ELIGE LA PELICULA QUE DESEES VER");
 	    lblTitulo.setFont(new Font("Rockwell", Font.BOLD, 30));
 	    lblTitulo.setForeground(Color.WHITE);
 	    lblTitulo.setOpaque(false);
 	    panelSuperior.add(lblTitulo);
-	   
-	    //scroll para el panel 
+	 
+	    //el scroll con las peliculas
 	    JPanel panelCartelera = new JPanel();
 	    panelCartelera.setLayout(new GridLayout(0, 3, 15, 15));
 	    panelCartelera.setOpaque(false);
-	   
-	    //cogemos  de la base de datos
+	 
+	    //titulos y duraciones guardados en un map ordenados
 	    Map<String, Integer> peliculasMap = new LinkedHashMap<>();
 	    DataBase db = parent.getDb();
 	    try (Connection conn = db.connect();
@@ -85,20 +81,16 @@ public class VentanaPeliculas extends JFrame {
 	            peliculasMap.put(titulo, duracion);
 	        }
 	    } catch (SQLException e) {
-	        System.err.println(e.getMessage());
+	        System.err.println("Error al recuperar películas de la base de datos: " + e.getMessage());
 	        e.printStackTrace();
 	    }
-	    
-	    // crear tarjetas para la cartelera
-	    for (Map.Entry<String, Integer> entry : peliculasMap.entrySet()) {
-	        String titulo = entry.getKey();
-	        int duracion = entry.getValue();
+	  	// crear tarjetas
+	    for (String titulo : peliculasMap.keySet()) {
+	        int duracion = peliculasMap.get(titulo);
 	        JPanel tarjeta = crearTarjeta(titulo, duracion);
 	        tarjeta.setOpaque(false);
 	        panelCartelera.add(tarjeta);
 	    }
-	 
-	    
 	    JPanel contenedorBoton = new JPanel(new GridBagLayout());
 	    contenedorBoton.setOpaque(false);
 	    JButton btnCancelar = new JButton("Cancelar");
@@ -110,7 +102,6 @@ public class VentanaPeliculas extends JFrame {
 	    		VentanaPeliculas.this.parent.setVisible(true);
 	    	}
 	    });
-	    
 	    btnCancelar.setPreferredSize(new Dimension(200, 50));
 	    btnCancelar.setBackground(new Color(240, 240, 240));
 	    btnCancelar.addMouseListener(new MouseAdapter() {
@@ -120,25 +111,24 @@ public class VentanaPeliculas extends JFrame {
 	        }
 	        @Override
 	        public void mouseExited(MouseEvent e) {
-	            btnCancelar.setBackground(new Color(245, 245, 240));
+	            btnCancelar.setBackground(new Color(240, 240, 240));
 	        }
 	    });
-	    
-	    // centrar el boton
+	 
 	    GridBagConstraints gbc = new GridBagConstraints();
 	    gbc.anchor = GridBagConstraints.CENTER;
-	   
+	 
 	    contenedorBoton.add(btnCancelar, gbc);
 	    panelCartelera.add(contenedorBoton);
-	   
-	    //scroll vertical
+	 
+	 
 	    JScrollPane scroll = new JScrollPane(panelCartelera, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 	    scroll.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-	    scroll.setOpaque(false); 
+	    scroll.setOpaque(false);
 	    scroll.getViewport().setOpaque(false);
 	    getContentPane().add(scroll);
-	    setVisible(true);  
-	 
+	    setVisible(true);
+	
 	}
 	
 	private void abrirSesion(String titulo, LocalTime inicio, int sala) {
@@ -149,122 +139,147 @@ public class VentanaPeliculas extends JFrame {
 	       sesionesAbiertas.put(clave, ventana);
 	    }
 	    ventana.setVisible(true);
-	    this.setVisible(false);
+	    ventana.toFront();
 	}
 	
 	private JPanel crearTarjeta(String titulo, int duracion) {
 		
-		JPanel tarjeta = new JPanel(new BorderLayout());
-		tarjeta.setOpaque(false);
-
-		JLabel imagen = new JLabel("", SwingConstants.CENTER);
-		File archivoImagen = obtenerImagen(titulo);
-
-		int anchuraMax = 250;
-		int alturaMax = 300;
-
-		int anchuraVisual = anchuraMax;
-		int alturaVisual = alturaMax;
-
-		if (archivoImagen != null && archivoImagen.exists()) {
-		    try {
-		        BufferedImage imgOriginal = ImageIO.read(archivoImagen);
-
-		        double escala = Math.min((double)anchuraMax/imgOriginal.getWidth(),(double)alturaMax/imgOriginal.getHeight());
-
-		        anchuraVisual = (int) (imgOriginal.getWidth() * escala);
-		        alturaVisual = (int) (imgOriginal.getHeight() * escala);
-
-		        Image imgEscalada = imgOriginal.getScaledInstance(anchuraVisual, alturaVisual, Image.SCALE_SMOOTH);
-		        imagen.setIcon(new ImageIcon(imgEscalada));
-
-		    } catch (Exception e) {
-		        imagen.setText("Error cargando imagen");
-		    }
-		} else {
-		    imagen.setText("Sin imagen");
-		}
-		imagen.setPreferredSize(new Dimension(anchuraVisual, alturaVisual));
-		tarjeta.add(imagen, BorderLayout.CENTER);
-
-	   
+	       JPanel tarjeta = new JPanel(new BorderLayout());
+	       tarjeta.setOpaque(false);
+	    
+	       JLabel imagen = new JLabel("", SwingConstants.CENTER);
+	       File archivoImagen = obtenerImagen(titulo);
+	       int maximaAnchura = 250;
+	       int maximaAltura = 300;
+	       int anchuraImagen = maximaAnchura;
+	       int alturaImagen = maximaAltura;
+	    
+	       if (archivoImagen != null && archivoImagen.exists()) {
+	           try {
+	               BufferedImage imagenObtenida = ImageIO.read(archivoImagen);
+	            
+	               int anchuraOriginal = imagenObtenida.getWidth();
+	               int alturaOriginal = imagenObtenida.getHeight();
+	            
+	               double visualizacionImagen = (double) anchuraOriginal / alturaOriginal;
+	               anchuraImagen = maximaAnchura;
+	               alturaImagen = (int) (maximaAnchura / visualizacionImagen);
+	            
+	               if (alturaImagen > maximaAltura) {
+	                   alturaImagen = maximaAltura;
+	                   anchuraImagen = (int) (maximaAltura * visualizacionImagen);
+	               }
+	               Image scaledImg = imagenObtenida.getScaledInstance(anchuraImagen, alturaImagen, Image.SCALE_SMOOTH);
+	               imagen.setIcon(new ImageIcon(scaledImg));
+	            
+	           } catch (Exception e) {
+	               imagen.setText("Error cargando imagen");
+	           }
+	       	} else {
+	           imagen.setText("Sin imagen");
+	       }
+	    
+	       imagen.setPreferredSize(new Dimension(anchuraImagen, alturaImagen));
+	       tarjeta.add(imagen, BorderLayout.CENTER);
+	    
+	  
 	       JLabel lblTitulo = new JLabel(titulo, SwingConstants.CENTER);
 	       lblTitulo.setFont(new Font("Arial", Font.BOLD, 16));
 	       lblTitulo.setForeground(Color.WHITE); 
 	       lblTitulo.setOpaque(false);
-	     
+	    
 	       JLabel lblDuracion = new JLabel(duracion + " min", SwingConstants.CENTER);
-	       lblDuracion.setForeground(Color.WHITE);
+	       lblDuracion.setForeground(Color.WHITE); 
 	       lblDuracion.setOpaque(false);
-	     
+	    
 	       JPanel panelTexto = new JPanel(new GridLayout(2, 1));
 	       panelTexto.setOpaque(false);
 	       panelTexto.add(lblTitulo);
 	       panelTexto.add(lblDuracion);
-	    
-	       int anchuraInferior = 90;
+	   
+	       int inferiorHeight = 90;
 	       JPanel panelHorarios = new JPanel(new FlowLayout(FlowLayout.CENTER, 6, 6));
 	       panelHorarios.setOpaque(true);
-	     
+	    
 	       panelHorarios.setBackground(new Color(255, 255, 255, 220));
-	       panelHorarios.setPreferredSize(new Dimension(anchuraVisual, anchuraInferior));
+	       panelHorarios.setPreferredSize(new Dimension(anchuraImagen, inferiorHeight));
 	       boolean haySesiones = false;
-	     
+	    
 	       for (Proyeccion p : proyecciones) {
-	           if (!p.pelicula.equals(titulo)) continue;
-	           haySesiones = true;
-	           final Proyeccion proy = p;
-	           String hora = String.format("%02d:%02d", proy.inicio.getHour(), proy.inicio.getMinute());
-	           JButton btn = new JButton("<html><center>Sala " + proy.sala + "<br>" + hora + "</center></html>");
-	           btn.setPreferredSize(new Dimension(90, 50));
-	           btn.addActionListener(e -> abrirSesion(titulo, proy.inicio, proy.sala));
-	           panelHorarios.add(btn);
-	       }
+	    	    if (!p.getPelicula().equals(titulo)) {
+	    	    	continue;
+	    	    }
+	    	    haySesiones = true;
+	    	    String horaStr = String.format("%02d:%02d", p.getInicio().getHour(),p.getInicio().getMinute());
+	    	    JButton btn = new JButton("<html><center>Sala " + p.getSala() +"<br>" + horaStr + "</center></html>");
+	    	    btn.setPreferredSize(new Dimension(90, 50));
+	    	    btn.addActionListener(new ActionListener() {
+	    	        @Override
+	    	        public void actionPerformed(ActionEvent e) {
+	    	            abrirSesion(titulo, p.getInicio(), p.getSala());
+	    	        }
+	    	    });
+	    	    btn.setBackground(new Color(240,240,240));
+	    	    btn.addMouseListener(new MouseAdapter() {
+	    	        @Override
+	    	        public void mouseEntered(MouseEvent e) {
+	    	            btn.setBackground(new Color(200, 200, 190));
+	    	        }
+
+	    	        @Override
+	    	        public void mouseExited(MouseEvent e) {
+	    	            btn.setBackground(new Color(240,240,240));
+	    	        }
+	    	    });
+
+	    	    panelHorarios.add(btn);
+	    	}
+
 	       if (!haySesiones) {
-	           JLabel lblsinSesiones = new JLabel("No hay sesiones hoy", SwingConstants.CENTER);
-	           lblsinSesiones.setForeground(Color.BLACK);
-	           panelHorarios.add(lblsinSesiones);
+	           JLabel sinSesiones = new JLabel("No hay sesiones hoy", SwingConstants.CENTER);
+	           sinSesiones.setForeground(Color.BLACK);
+	           panelHorarios.add(sinSesiones);
 	       }
-	     
-	       JPanel panelInferior = new JPanel(new CardLayout());
-	       panelInferior.setOpaque(false);
-	       panelInferior.setPreferredSize(new Dimension(anchuraVisual, anchuraInferior));
-	       panelInferior.add(panelTexto, "texto");
-	       panelInferior.add(panelHorarios, "horarios");
-
+	    
+	       JPanel panelInferiorLocal = new JPanel(new CardLayout());
+	       panelInferiorLocal.setOpaque(false);
+	       panelInferiorLocal.setPreferredSize(new Dimension(anchuraImagen, inferiorHeight));
+	       panelInferiorLocal.add(panelTexto, "texto");
+	       panelInferiorLocal.add(panelHorarios, "horarios");
+	       CardLayout clLocal = (CardLayout) panelInferiorLocal.getLayout();
+	    
 	       panelTexto.addMouseListener(new java.awt.event.MouseAdapter() {
-	           @Override
+	         @Override
 	           public void mouseEntered(java.awt.event.MouseEvent e) {
-	               ((CardLayout) panelInferior.getLayout()).show(panelInferior, "horarios");
+	               clLocal.show(panelInferiorLocal, "horarios");
 	           }
 	       });
+	    
 	       panelHorarios.addMouseListener(new java.awt.event.MouseAdapter() {
-	           @Override
+	         @Override
 	           public void mouseExited(java.awt.event.MouseEvent e) {
-	               ((CardLayout) panelInferior.getLayout()).show(panelInferior, "texto");
+	               clLocal.show(panelInferiorLocal, "texto");
 	           }
 	       });
-
-	       tarjeta.add(panelInferior, BorderLayout.SOUTH);
-	       tarjeta.setPreferredSize(new Dimension(anchuraVisual, alturaVisual + anchuraInferior));
+	    
+	       tarjeta.add(panelInferiorLocal, BorderLayout.SOUTH);
+	    
+	       tarjeta.setPreferredSize(new Dimension(anchuraImagen, alturaImagen + inferiorHeight));
 	       return tarjeta;
 	   }
-
 private File obtenerImagen(String titulo) {
 	    File carpeta = new File("imagenes");
 	    if (!carpeta.exists() || carpeta.listFiles() == null) {
 	        return null;
 	    }
-	    String titulofijo = titulo.replaceAll("[\\\\/:*?\"<>|]", "_") + ".jpg";
-	    for (File file : carpeta.listFiles()) {
-	        if (!file.isFile()) {
-	        	continue;
-	        }
-	        if (file.getName().equalsIgnoreCase(titulofijo)) {
-	            return file; 
+	    String safeTitulo = titulo.replaceAll("[\\\\/:*?\"<>|]", "_") + ".jpg";
+	    for (File f : carpeta.listFiles()) {
+	        if (!f.isFile()) continue;
+	        if (f.getName().equalsIgnoreCase(safeTitulo)) {
+	            return f; 
 	        }
 	    }
-	    return null;
+	    return null; //no encuentra nada
 	}
 private JPanel crearPanelConFondo(String ruta) {
 		Image img = new ImageIcon(ruta).getImage();

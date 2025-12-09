@@ -8,44 +8,43 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 public class VentanaTicket extends JFrame {
    private static final long serialVersionUID = 1L;
-   private JPanel contentPane;
-   private VentanaPago parent;
+   private VentanaPago parent4;
    private VentanaPrincipal ventPrinc;
    private String datosQR;
-   public VentanaTicket(VentanaPago parent, VentanaPrincipal ventPrin, String datosQR) {
-       this.parent = parent;
+   public VentanaTicket(VentanaPago parent4, VentanaPrincipal ventPrin, String datosQR) {
+       this.parent4 = parent4;
        this.ventPrinc = ventPrin;
        this.datosQR = datosQR;
        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
        setBounds(100, 100, 613, 434);
        setExtendedState(JFrame.MAXIMIZED_BOTH);
-       // FONDO
-       JPanel contentPane = crearPanelConFondo("src/imagenes/dibujoTicket.jpg");
-       contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+       JPanel contentPane = crearPanelConFondo("imagenes/dibujoTicket.jpg");
+       contentPane.setBorder(new EmptyBorder(30, 5, 5, 5));
        setContentPane(contentPane);
        contentPane.setLayout(new BorderLayout(0, 0));
-       // CABECERA
        JPanel panel_1 = new JPanel();
        panel_1.setOpaque(false);
        contentPane.add(panel_1, BorderLayout.NORTH);
        panel_1.setLayout(new GridLayout(0, 1, 10, 10));
-       JLabel labelTitulo = new JLabel("¡ GRACIAS POR TU COMPRA!");
-       labelTitulo.setFont(new Font("Tahoma", Font.PLAIN, 18));
+       JLabel labelTitulo = new JLabel("¡GRACIAS POR TU COMPRA!");
+       labelTitulo.setFont(new Font("Tahoma", Font.PLAIN, 20));
        labelTitulo.setHorizontalAlignment(SwingConstants.CENTER);
        panel_1.add(labelTitulo);
-       JLabel labelQR = new JLabel("Enseña este código QR en taquilla para acceder al cine y disfrutar de su película");
-       labelQR.setFont(new Font("Tahoma", Font.PLAIN, 13));
+       JLabel labelQR = new JLabel("Enseñe este código QR en taquilla para acceder al cine y disfrutar de su película");
+       labelQR.setFont(new Font("Tahoma", Font.PLAIN, 16));
        labelQR.setForeground(new Color(0, 0, 0));
        labelQR.setHorizontalAlignment(SwingConstants.CENTER);
        panel_1.add(labelQR);
-       // BOTÓN CERRAR
        JPanel panelSur = new JPanel();
        panelSur.setOpaque(false);
        contentPane.add(panelSur, BorderLayout.SOUTH);
        JButton btnCerrar = new JButton("Cerrar");
        btnCerrar.setFont(new Font("Tahoma", Font.PLAIN, 16));
+       btnCerrar.setBackground(new Color(240,240,240));
        btnCerrar.addActionListener(new ActionListener() {
            public void actionPerformed(ActionEvent e) {
                VentanaTicket.this.dispose();
@@ -54,8 +53,17 @@ public class VentanaTicket extends JFrame {
                }
            }
        });
+       btnCerrar.addMouseListener(new MouseAdapter() {
+  	        @Override
+  	        public void mouseEntered(MouseEvent e) {
+  	            btnCerrar.setBackground(new Color(200, 200, 190));
+  	        }
+  	        @Override
+  	        public void mouseExited(MouseEvent e) {
+  	            btnCerrar.setBackground(new Color(240,240,240));
+  	        }
+  	    });
        panelSur.add(btnCerrar);
-       // CENTRO: TARJETA CON QR + TEXTO
        JPanel panelCentral = new JPanel(new GridBagLayout());
        panelCentral.setOpaque(false);
        contentPane.add(panelCentral, BorderLayout.CENTER);
@@ -91,7 +99,7 @@ public class VentanaTicket extends JFrame {
        };
    }
    private JLabel crearLabelQRDesdeDatos() {
-       int size = 300; 
+       int size = 300;
        ImageIcon icon;
        try {
            java.awt.image.BufferedImage img = generarQR(datosQR, size);
@@ -106,16 +114,23 @@ public class VentanaTicket extends JFrame {
        lblQR.setHorizontalAlignment(SwingConstants.CENTER);
        return lblQR;
    }
-   private java.awt.image.BufferedImage generarQR(String texto, int size) throws WriterException {
-       QRCodeWriter qrCodeWriter = new QRCodeWriter();
+  
+   public java.awt.image.BufferedImage generarQR(String texto, int size) throws WriterException{
+   	QRCodeWriter qrCodeWriter = new QRCodeWriter();
        BitMatrix bitMatrix = qrCodeWriter.encode(texto, BarcodeFormat.QR_CODE, size, size);
+      
        java.awt.image.BufferedImage image =
-               new java.awt.image.BufferedImage(size, size, java.awt.image.BufferedImage.TYPE_INT_RGB);
-       for (int x = 0; x < size; x++) {
-           for (int y = 0; y < size; y++) {
-               int color = bitMatrix.get(x, y) ? 0xFF000000 : 0xFFFFFFFF; // negro/blanco
-               image.setRGB(x, y, color);
-           }
+       		new java.awt.image.BufferedImage(size, size, java.awt.image.BufferedImage.TYPE_INT_RGB);
+       for(int x = 0; x < size; x++) {
+       	for(int y = 0; y < size; y++) {
+       		int color;
+       		if (bitMatrix.get(x, y)) {
+       		    color = 0xFF000000;
+       		} else {
+       		    color = 0xFFFFFFFF;
+       		}
+       		image.setRGB(x, y, color);
+       	}
        }
        return image;
    }
