@@ -48,7 +48,6 @@ public List<Proyeccion> getProyecciones() {
 		this.proyecciones = proyecciones;
 	}
 	
-	private final Random random = new Random();
  
   public Connection connect() throws SQLException {
       return DriverManager.getConnection(URL);

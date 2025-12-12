@@ -241,53 +241,42 @@ public class VentanaSupervisor extends JFrame {
 	   	            btnEditar.setBackground(new Color(240,240,240));	   	        	
 	        }
 	    };
-      btnEditar.addActionListener(new ActionListener() {
-          public void actionPerformed(ActionEvent e) {
-              int fila = table.getSelectedRow();
-              int col = table.getSelectedColumn();
-              if(fila == -1 || col == -1) {
-                  JOptionPane.showMessageDialog(VentanaSupervisor.this,
-                          "Selecciona una casilla válida.");
-                  return;
-              }
-              if(filaPrimera == -1 && colPrimera == -1) {
-                  filaPrimera = fila;
-                  colPrimera = col;
-                  table.repaint();
-                  JOptionPane.showMessageDialog(VentanaSupervisor.this,"Primera casilla guardada.\nAhora selecciona otra y pulsa EDITAR de nuevo.");
-                  return;
-              }
-              int filaSegunda = fila;
-              int colSegunda = col;
-             
-              Object valor1 = table.getValueAt(filaPrimera, colPrimera);
-              Object valor2 = table.getValueAt(filaSegunda, colSegunda);
-             
-              String texto1 = valor1.toString();
-              String texto2 = valor2.toString();
-             
-              String horario1 = extraerHorario(texto1);
-              String dni1 = extraerDni(texto1);
-              String horario2 = extraerHorario(texto2);
-              String dni2 = extraerDni(texto2);
-             
-              table.setValueAt("<html>" + horario1 + "<br>" + dni2 + "</html>", filaPrimera, colPrimera);
-              table.setValueAt("<html>" + horario2 + "<br>" + dni1 + "</html>", filaSegunda, colSegunda);
-             
-              filaPrimera = -1;
-              colPrimera = -1;
-             
-              table.repaint();
-             
-              JOptionPane.showMessageDialog(VentanaSupervisor.this,
-                      "¡Trabajadores intercambiados!");
-             
-              btnEditar.setEnabled(false);
-              btnVisualizar.setEnabled(false);
-              btnVisualizar.removeMouseListener(oscurecerBtnVisualizar);
-              btnEditar.removeMouseListener(oscurecerBtnEditar);
-          }
-      });
+	    btnEditar.addMouseListener(new MouseAdapter() {
+	        @Override
+	        public void mouseClicked(MouseEvent e) {
+
+	            int fila = table.getSelectedRow();
+	            int col = table.getSelectedColumn();
+
+	            if (fila == -1 || col == -1) {
+	                JOptionPane.showMessageDialog(VentanaSupervisor.this,
+	                        "Selecciona una casilla antes de editar.");
+	                return;
+	            }
+
+	            String textoCelda = table.getValueAt(fila, col).toString();
+	            String dniActual = extraerDni(textoCelda);
+
+	            List<Trabajador> listaFiltrada = new ArrayList<>();
+	            for (Trabajador t : lista) {
+	                if (!t.getCodico_dni().equals(dniActual)) {
+	                    listaFiltrada.add(t);
+	                }
+	            }
+
+	            VentanaCambiarTrabajador ventana =
+	                    new VentanaCambiarTrabajador(table, fila, col, listaFiltrada);
+	            ventana.setVisible(true);
+
+	            table.repaint();
+	        }
+	    });
+
+
+
+
+
+
       panelDerecho.add(btnEditar);
      
       JScrollPane scrollPane = new JScrollPane();
