@@ -272,7 +272,7 @@ public class VentanaSupervisor extends JFrame {
 	        }
 	    });
 
-
+//hhhj
 
 
 

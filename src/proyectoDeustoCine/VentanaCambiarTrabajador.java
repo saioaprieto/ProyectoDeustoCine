@@ -16,7 +16,7 @@ public class VentanaCambiarTrabajador extends JFrame {
     	setTitle("Seleccionar trabajador");
         setSize(900, 600);
         setLocationRelativeTo(null);
-
+//gj
         JPanel contentPane = crearPanelConFondo("imagenes/fondoPeliculas.jpg");
         contentPane.setLayout(new BorderLayout());
         setContentPane(contentPane);
