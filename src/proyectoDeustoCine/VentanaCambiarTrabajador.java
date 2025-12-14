@@ -73,8 +73,8 @@ public class VentanaCambiarTrabajador extends JFrame {
 					        String dniBoton = extraerDni(valorBoton);
 					        String horarioBoton = extraerHorario(valorBoton);
 
-					        table.setValueAt("<html>" + horarioBoton + "<br>" + dniBoton + "</html>", filaSeleccionada, colSeleccionada);
-					        table.setValueAt("<html>" + horarioSeleccionado + "<br>" + dniSeleccionado + "</html>", filaTrabajador, colSeleccionada);
+					        table.setValueAt("<html>" + horarioSeleccionado + "<br>" + dniBoton + "</html>", filaSeleccionada, colSeleccionada);
+					        table.setValueAt("<html>" + horarioBoton + "<br>" + dniSeleccionado + "</html>", filaTrabajador, colSeleccionada);
 
 					        table.repaint();
 					        dispose();
